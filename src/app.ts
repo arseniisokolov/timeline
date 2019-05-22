@@ -1,7 +1,7 @@
 import "./index.scss";
 import { LayoutPage } from "./app/pages/layout/layout.page";
 
-class Bootstrap {
+class App {
 
     private readonly _layout: LayoutPage
 
@@ -11,5 +11,5 @@ class Bootstrap {
 
 }
 
-var bootstrap = new Bootstrap();
+const app = new App();
 

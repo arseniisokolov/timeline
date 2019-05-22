@@ -1,4 +1,4 @@
-import { Page } from "../../data/models/page";
+import { Page } from "../../base/page";
 
 export class ListPage extends Page {
 
