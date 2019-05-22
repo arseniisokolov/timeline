@@ -2,6 +2,7 @@ import { Page } from "../../data/models/page";
 import { ListPage } from "../list/list.page";
 import { ListItemInfoPage } from "../list-item-info/list-item-info.page";
 import { NotFoundPage } from "../not-found/not-found.page";
+import { Constants } from "../../data/app-constants";
 
 export class LayoutPage {
 
@@ -37,7 +38,7 @@ export class LayoutPage {
     private renderPage() {
         if (!this._currentPage)
             return;
-        const routerOutletEl: Element = window.document.getElementsByClassName("app-router-outlet")[0];
+        const routerOutletEl: Element = window.document.getElementsByClassName(Constants.HtmlElems.routerOutlet)[0];
         routerOutletEl.innerHTML = this._currentPage.getView();
     }
 
