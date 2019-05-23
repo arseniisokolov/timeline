@@ -13,4 +13,4 @@ export const listPageHtml = `
 
   </div>
 </div>
-<!-- `;
+`;

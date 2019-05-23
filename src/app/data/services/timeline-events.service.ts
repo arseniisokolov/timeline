@@ -71,7 +71,7 @@ const mock = {
             senderName: 'Петр',
             currency: 'RUB',
             description: 'Это тебе',
-            docDate: new Date('2018-02-01').getTime()
+            docDate: new Date().getTime()
         },
         {
             id: Helpers.getGuid(),

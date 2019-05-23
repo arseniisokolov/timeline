@@ -26,7 +26,7 @@ export abstract class TimelineEventModel {
     }
 
     public getFormattedDate(): string {
-        const dateAlias = this.Date.getDay() === new Date().getDay() ? 'сегодня' : Helpers.getFormattedDate(this.Date);
+        const dateAlias = this.Date.toDateString() === new Date().toDateString() ? 'сегодня' : Helpers.getFormattedDate(this.Date);
         return `${Helpers.getFormattedTime(this.Date)}, ${dateAlias}`;
     }
 
