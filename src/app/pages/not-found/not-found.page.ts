@@ -1,11 +1,17 @@
 import { Page } from "../../base/page";
+import { notFoundPageHtml } from "./not-found.page.html";
 
 export class NotFoundPage extends Page {
 
-  public getView(): string {
-    return `<div class="not-found">
-    <div class="not-found__title">Страница на найдена</div>  
-  </div>`;
+  protected blockName: string = 'not-found';
+
+  constructor() {
+    super();
+    this.initialize();
+  }
+
+  public getTemplate(): string {
+    return notFoundPageHtml;
   }
 
 }

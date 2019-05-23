@@ -18,9 +18,11 @@ export class TimelineEventsService {
 
     public getItems(docTypes: TimelineDocTypes[]): Observable<TimelineEventModel[]> {
         return forkJoin(
-            docTypes.map(docType => this._localStorage.get(docType.toLowerCase()).pipe(
-                map(items => timelineModelsFabric(docType, items))
-            ))
+            docTypes.map(docType =>
+                this._localStorage.get(docType.toLowerCase()).pipe(
+                    map(items => timelineModelsFabric(docType, items))
+                )
+            )
         ).pipe(
             map(results => {
                 return results.reduce((acc, item) => [...acc, ...item]);

@@ -42,7 +42,8 @@ export class LayoutPage {
         if (!this._currentPage)
             return;
         const routerOutletEl: Element = window.document.getElementsByClassName(Constants.routerOutletElem)[0];
-        routerOutletEl.innerHTML = this._currentPage.getView();
+        routerOutletEl.innerHTML = this._currentPage.getTemplate();
+        this._currentPage.initializeAfterRender();
     }
 
     private checkBrowserButtons() {

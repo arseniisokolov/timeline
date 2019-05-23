@@ -1,3 +1,4 @@
-<div class="not-found">
+
+export const notFoundPageHtml = `<div class="not-found">
   <div class="not-found__title">Страница на найдена</div>  
-</div>
+</div>`;

@@ -1,15 +1,25 @@
 import { Page } from "../../base/page";
+import { listItemInfoPageHtml } from "./list-item-info.page.html";
 
 export class ListItemInfoPage extends Page {
 
-    private _testTitle: string = new Date().toTimeString();
+    protected blockName: string = 'list-item-info';
+    // private _viewModel: TimelineListViewModel;
 
-    public getView(): string {
-        return `<div class="list-item-info">
-        <div class="list-item-info__title">
-            ${this._testTitle}
-        </div>
-    </div>`;
+    constructor() {
+        super();
+        this.initialize();
+    }
+
+    public getTemplate(): string {
+        return listItemInfoPageHtml;
+    }
+
+    public initializeAfterRender() {
+    }
+
+    protected initialize() {
+        super.initialize();
     }
 
 }
