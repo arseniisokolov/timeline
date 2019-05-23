@@ -14,7 +14,7 @@ export abstract class Page {
         this.block = this.getBlock(this.blockName);
     }
 
-    protected initialize() {
+    protected initialize(urlParams?: URLSearchParams) {
     }
 
     /** Ищет BEM-блок по всему html приложения */

@@ -7,6 +7,7 @@ import { listPageHtml } from "./list.page.html";
 import { TransactionModel } from "../../data/models/transaction.model";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
+import { Helpers } from "../../data/base/helpers";
 
 export class ListPage extends Page {
 
@@ -17,9 +18,9 @@ export class ListPage extends Page {
     TimelineDocTypes.News,
   ]
 
-  constructor() {
+  constructor(urlParams?: URLSearchParams) {
     super();
-    this.initialize();
+    this.initialize(urlParams);
   }
 
   public getTemplate(): string {
@@ -40,8 +41,8 @@ export class ListPage extends Page {
     this.renderItems();
   }
 
-  protected initialize() {
-    super.initialize();
+  protected initialize(urlParams?: URLSearchParams) {
+    super.initialize(urlParams);
     App.TimelineEventsService.getItems(this._docTypes).subscribe(items => {
       this._viewModel = new TimelineListViewModel({ items, sortingMode: 'byDate' });
       console.log(this._viewModel);
@@ -49,15 +50,21 @@ export class ListPage extends Page {
   }
 
   private renderItems() {
-    this.getElement('list__body').innerHTML = this._viewModel.VisibleItems.map(item => {
-      return this.getItemTemplate(item);
-    }).reduce((acc, item) => acc + item);
+    this.getElement('list__body').innerHTML = this._viewModel.VisibleItems
+      .map(item => this.getItemTemplate(item))
+      .reduce((acc, item) => acc + item);
+    this._viewModel.VisibleItems.forEach(item => {
+      this.getElement(`list-item_${item.Id}`).addEventListener('click', (e: Event) => {
+        Helpers.stopPropagation(e);
+        App._layout.changeRoute(`info?id=${item.Id}&docType=${item.DocType}`);
+      });
+    })
   }
 
   private getItemTemplate(item: TimelineEventModel) {
     if (item instanceof TransactionModel) {
       return `
-      <div class="list-item">
+      <div class="list-item list-item_${item.Id}">
           <div class="list-item__date">${item.getFormattedDate()}</div>
           <div class="list-item__amount">${item.Amount.Formatted}</div>
           <div class="list-item__title">${item.Title}</div>
@@ -65,7 +72,7 @@ export class ListPage extends Page {
     }
     if (item instanceof NewsItemModel) {
       return `
-      <div class="list-item">
+      <div class="list-item list-item_${item.Id}">
           <div class="list-item__title">${item.Title}</div>
       </div>`;
     }

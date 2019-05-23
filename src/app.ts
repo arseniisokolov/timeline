@@ -6,7 +6,7 @@ import "./index.scss";
 class Application {
 
     public TimelineEventsService: TimelineEventsService;
-    private _layout: LayoutPage;
+    public _layout: LayoutPage;
 
     constructor() {
         this.TimelineEventsService = new TimelineEventsService();

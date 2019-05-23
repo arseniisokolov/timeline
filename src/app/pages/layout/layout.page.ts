@@ -25,16 +25,17 @@ export class LayoutPage {
     }
 
     public changeRoute(name: string) {
-        window.history.pushState({}, "TimeLine", `/${name}`)
+        window.history.pushState({}, "TimeLine", `${window.location.origin}/${name}`)
         this.loadRoute();
     }
 
     private getCurrentPage(): Page {
+        const urlParams = new URLSearchParams(window.location.search);
         switch (this._currentRoute) {
             case '/':
-            case '/list': return new ListPage();
-            case '/info': return new ListItemInfoPage();
-            default: return new NotFoundPage();
+            case '/list': return new ListPage(urlParams);
+            case '/info': return new ListItemInfoPage(urlParams);
+            default: return new NotFoundPage(urlParams);
         }
     }
 
@@ -47,9 +48,7 @@ export class LayoutPage {
     }
 
     private checkBrowserButtons() {
-        window.addEventListener("popstate", (e: any) => {
-            if (!e.state)
-                return;
+        window.addEventListener("popstate", () => {
             if (window.location.pathname === this._currentRoute)
                 return;
             this.loadRoute();

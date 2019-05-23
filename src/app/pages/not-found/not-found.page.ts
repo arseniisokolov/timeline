@@ -5,9 +5,9 @@ export class NotFoundPage extends Page {
 
   protected blockName: string = 'not-found';
 
-  constructor() {
+  constructor(urlParams?: URLSearchParams) {
     super();
-    this.initialize();
+    this.initialize(urlParams);
   }
 
   public getTemplate(): string {

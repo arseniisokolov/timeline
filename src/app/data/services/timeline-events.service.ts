@@ -32,7 +32,7 @@ export class TimelineEventsService {
     public getItemById(docType: TimelineDocTypes, id: string): Observable<TimelineEventModel> {
         return this.getItems([docType]).pipe(
             first(),
-            map(items => items.find(i => i.Id === id))
+            map(items => items.find(i => i.Id === id)),
         );
     }
 
