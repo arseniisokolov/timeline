@@ -21,6 +21,20 @@ export class LocalStorageAdapter<T extends { id: string }> {
         );
     }
 
+    public update(key: string, item: T): Observable<void> {
+        return this.get(key).pipe(
+            first(),
+            map(existItems => {
+                const itemIndex = existItems.findIndex(i => i.id === item.id);
+                if (itemIndex > -1)
+                    existItems.splice(itemIndex, 1, item);
+                localStorage.setItem(key, JSON.stringify(existItems));
+            }, (error: any) => {
+                console.error(error);
+            })
+        );
+    }
+
     public delete(key: string, id: string): Observable<void> {
         return this.get(key).pipe(
             first(),

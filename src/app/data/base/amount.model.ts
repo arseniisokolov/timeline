@@ -22,10 +22,10 @@ export class AmountModel {
         }
         this.Numeric = amount;
         this.Currency = currency;
-        this.Formatted = this.formatAmount(Math.abs(amount), isDebet) + this.getCurrencySign(currency);
+        this.Formatted = this.getFormattedAmount(Math.abs(amount), isDebet) + this.getCurrencySign(currency);
     }
 
-    private formatAmount(amount: number, isDebet: boolean): string {
+    private getFormattedAmount(amount: number, isDebet: boolean): string {
         const amountParts = (Math.round(amount * 100) / 100).toFixed(2).split(".")
         const bodyPart = parseInt(amountParts[0] || "0");
         let decimalPart = amountParts[1] || "00";
@@ -37,10 +37,6 @@ export class AmountModel {
         return result.concat(`${this._decimalSeparator}${decimalPart}`);
     }
 
-    private getSeparated(value: number) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, this._separator);
-    }
-
     private getCurrencySign(currency: string): string {
         switch (currency) {
             case "RUR":
@@ -49,6 +45,10 @@ export class AmountModel {
             case "EUR": return "€";
             default: return "ед.";
         }
+    }
+
+    private getSeparated(value: number) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, this._separator);
     }
 
 }

@@ -1,5 +1,5 @@
 import { Observable, forkJoin, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
@@ -7,10 +7,10 @@ import { timelineModelsFabric } from "../base/timeline-model-fabric";
 
 export class TimelineEventsService {
 
-    private _localStorageAdapter: LocalStorageAdapter<ITimelineEvent>;
+    private _localStorage: LocalStorageAdapter<ITimelineEvent>;
 
     constructor() {
-        this._localStorageAdapter = new LocalStorageAdapter<ITimelineEvent>()
+        this._localStorage = new LocalStorageAdapter<ITimelineEvent>()
     }
 
     public getItems(docTypes: TimelineDocTypes[]): Observable<TimelineEventModel[]> {
@@ -23,8 +23,22 @@ export class TimelineEventsService {
             map(results => {
                 console.log(results);
                 return results.reduce((acc, item) => [...acc, ...item]);
-            }
-            ));
+            }));
+    }
+
+    public getItemById(docType: TimelineDocTypes, id: string): Observable<TimelineEventModel> {
+        return this.getItems([docType]).pipe(
+            first(),
+            map(items => items.find(i => i.Id === id))
+        );
+    }
+
+    public updateItem(docType: TimelineDocTypes, item: ITimelineEvent): Observable<void> {
+        return this._localStorage.update(docType, item);
+    }
+
+    public deleteItem(docType: TimelineDocTypes, id: string): Observable<void> {
+        return this._localStorage.delete(docType, id);
     }
 
 }

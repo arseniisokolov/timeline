@@ -1,4 +1,5 @@
 import { TimelineEventModel, ITimelineEvent } from "../base/timeline-event.model";
+import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
 
 /** Новость о событии */
 export class NewsItemModel extends TimelineEventModel {
@@ -13,6 +14,7 @@ export class NewsItemModel extends TimelineEventModel {
         });
     }
 
+    public DocType: TimelineDocTypes = TimelineDocTypes.News;
     /** Новость была прочитана */
     public IsVisited: boolean;
 
@@ -22,6 +24,12 @@ export class NewsItemModel extends TimelineEventModel {
         super.fromData(data);
         this.Title = data.extract;
         this.IsVisited = data.isVisited;
+    }
+
+    public toData(): INewsItem {
+        const res: INewsItem = super.toData() as INewsItem;
+        res.isVisited = this.IsVisited;
+        return res;
     }
 
 }
