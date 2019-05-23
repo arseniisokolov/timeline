@@ -23,7 +23,9 @@ export class TimelineListViewModel {
 
     private initialize(data: ITimelineListInitializeData) {
         this._items = data.items;
-        this.VisibleItems = data.items;
+        this.VisibleItems = data.items || [];
+        if (!this.VisibleItems.length)
+            return;
         this.SortingMode = data.sortingMode
         if (data.sortingMode === 'byDate')
             this.sortByDate();

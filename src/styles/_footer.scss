@@ -1,0 +1,19 @@
+.footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 1rem 0 1rem 6rem;;
+    
+    &__about {
+        font-family: $base-font;
+        color: $base-color;
+    }
+
+    &__title {
+        margin-bottom: 1rem;
+    }
+
+    &__logo {
+        width: 20%;
+    }
+}

@@ -12,7 +12,7 @@ export class TimelineEventsService {
 
     constructor() {
         this._localStorage = new LocalStorageAdapter<ITimelineEvent>();
-        this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), mock[TimelineDocTypes.Transaction.toLowerCase()]).subscribe();
+        // this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), mock[TimelineDocTypes.Transaction.toLowerCase()]).subscribe();
         this._localStorage.post(TimelineDocTypes.News.toLowerCase(), mock[TimelineDocTypes.News.toLowerCase()]).subscribe();
     }
 

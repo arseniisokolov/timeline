@@ -3,7 +3,7 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    width: 80%;
+    width: 70%;
     height: auto;
     margin-bottom: 2rem;
     padding: 2rem 3rem;
@@ -11,6 +11,7 @@
     border-radius: .5rem;
     box-shadow: 10px 6px 11px -5px rgba(40,40,40,0.48);
     cursor: pointer;
+    transition: box-shadow .3s;
 
     &__amount {
         font-size: 1.5rem;
@@ -20,8 +21,8 @@
     }
 
     &__date {
-        font-size: 1.5rem;
-        margin-left: 3rem;
+        font-size: 1.2rem;
+        padding-left: 2rem;
         color: $sub-color;
         flex: 1 1 20%;
     }
@@ -37,13 +38,17 @@
 
 // States 
 .list-item {
+    &:hover {
+        box-shadow: 10px 6px 7px 0px rgba(40, 40, 40, 0.6);
+    }
+
     &__title_is-visited {
         color: $sub-color;
         font-weight: initial;
     }
 
     &__amount_is-positive {
-        color: #00d746;
+        color: #00ce43;
     }
 
     &__amount_is-negative {

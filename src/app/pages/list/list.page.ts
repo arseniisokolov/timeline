@@ -51,12 +51,16 @@ export class ListPage extends Page {
     protected initialize() {
         super.initialize();
         App.TimelineEventsService.getItems(App.Config.listDocTypes).subscribe(items => {
-            this._viewModel = new TimelineListViewModel({ items, sortingMode: 'byType' });
-            console.log(this._viewModel);
+            this._viewModel = new TimelineListViewModel({ items, sortingMode: 'byDate' });
         })
     }
 
     private renderItems() {
+        if (!this._viewModel.VisibleItems.length) {
+            this.getElement('list__filter-bar').classList.add('list__filter-bar_is-hidden');
+            return;
+        }
+        this.getElement('list__filter-bar').classList.remove('list__filter-bar_is-hidden');
         this.getElement('list__body').innerHTML = this._viewModel.VisibleItems
             .map(item => this.getItemTemplate(item))
             .reduce((acc, item) => acc + item);

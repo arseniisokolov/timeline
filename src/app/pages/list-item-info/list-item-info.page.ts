@@ -8,6 +8,8 @@ import { NewsItemModel } from "../../data/models/news-item.model";
 import { listItemInfoTransactionPageHtml } from "./list-item-info-transaction.page.html";
 import { listItemInfoNewsPageHtml } from "./list-item-info-news.page.html";
 import './styles/list-item-info.master.scss'
+import { interval } from "rxjs";
+import { first } from "rxjs/operators";
 
 export class ListItemInfoPage extends Page {
 
@@ -49,26 +51,26 @@ export class ListItemInfoPage extends Page {
 
     private renderData() {
         this.getElement('item-info__title').innerHTML = this._model.Title;
-        this.getElement('item-info__description').innerHTML = this._model.Description;
-        const acceptItemBtnElem = this.getElement('item-info__accept-btn');
+        this.getElement('item-info__body').innerHTML = this._model.Description;
+        const acceptItemBtnElem = this.getElement('item-info__btn_accept');
         if (acceptItemBtnElem && this._model instanceof NewsItemModel && this._model.IsVisited)
-            acceptItemBtnElem.classList.add('item-info__accept-btn_is-disabled');
+            acceptItemBtnElem.classList.add('item-info__btn_is-disabled');
     }
 
     private checkTemplateEvents() {
-        this.getElement('item-info__back-btn').addEventListener('click', () =>
+        this.getElement('item-info__btn_back').addEventListener('click', () =>
             App.RouterService.navigate('list')
         );
-        const deleteItemBtnElem = this.getElement('item-info__delete-btn');
-        const acceptItemBtnElem = this.getElement('item-info__accept-btn');
+        const deleteItemBtnElem = this.getElement('item-info__btn_delete');
+        const acceptItemBtnElem = this.getElement('item-info__btn_accept');
         if (deleteItemBtnElem)
-            this.getElement('item-info__delete-btn').addEventListener('click', () => {
+            deleteItemBtnElem.addEventListener('click', () => {
                 App.TimelineEventsService.deleteItem(this._docType, this._model.Id).subscribe(() => {
-                    App.RouterService.navigate('list');
+                    interval(500).pipe(first()).subscribe(() => App.RouterService.navigate('list'))
                 });
             })
         if (acceptItemBtnElem)
-            this.getElement('item-info__accept-btn').addEventListener('click', () => {
+            acceptItemBtnElem.addEventListener('click', () => {
                 if (this._model instanceof NewsItemModel)
                     this._model.IsVisited = true;
                 App.TimelineEventsService.updateItem(this._docType, this._model.toData()).subscribe(() => {

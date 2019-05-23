@@ -1,9 +1,6 @@
  export const listPageHtml = `
 <div class="list">
     <div class="list__filter-bar filter-bar">
-        <div class="filter-bar__caption">
-            Как сортировать?
-        </div>
         <div
             class="filter-bar__item filter-bar__item_by-date">
             По дате
@@ -14,7 +11,9 @@
         </div>
     </div>
     <div class="list__body-wrapper">
-        <div class="list__body"></div>
+        <div class="list__body">
+            Новостей пока нет. Скоро появятся!
+        </div>
     </div>
 </div>
 `;

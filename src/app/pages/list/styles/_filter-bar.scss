@@ -1,40 +1,33 @@
 .filter-bar {
     display: flex;
     align-items: baseline;
+    padding-top: 2rem;
 
-    &__caption{
-        color: $base-color;
-        font-size: 2rem;
-        margin-right: 3rem;
-    }
-
-    &__item{
+    &__item {
         text-decoration: underline;
-        color: $base-color;
+        color: $sub-color;
         font-size: 1.5rem;
         margin-right: 1rem;
         cursor: pointer;
-        transition: color .3s;
+        transition: .3s;
     }
 
-    
+ 
 }
 
 //States
 .filter-bar {
-
     &__item:hover {
-        color: $accent-color;
+        color: $base-color;
     }
 
     &__item_is-active{
         padding: .3rem;
         text-decoration: none;
-        border: 1px solid $accent-color;
+        border: 1px solid $sub-color;
         border-radius: .5rem;
-        color: $accent-color;
+        color: $base-color;
         font-weight: 600;
         cursor: default;
     }
-
 }

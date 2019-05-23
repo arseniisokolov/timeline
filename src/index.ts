@@ -2,7 +2,7 @@ import { TimelineEventsService } from "./app/data/services/timeline-events.servi
 import { RouterService } from "./app/data/services/router.service";
 import { TimelineDocTypes } from "./app/data/base/timeline-doc-types.enum";
 
-import "./index.scss";
+import "./styles/index.scss";
 
 class Application {
 
