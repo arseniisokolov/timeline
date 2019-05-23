@@ -1,6 +1,6 @@
 import { Observable, forkJoin, of } from "rxjs";
 import { map, first } from "rxjs/operators";
-import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
+import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
 import { timelineModelsFabric } from "../base/timeline-model-fabric";

@@ -1,14 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
     <head>
-        <meta charset="utf-8" />
-        <title>Timeline</title>
+        <meta charset="utf-8">
+        <title>Лента новостей</title>
+        <base href="/">
+
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1">
+        <script defer
+            src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
+            integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
+            crossorigin="anonymous"></script>
     </head>
 
     <body>
-        Лента новостей
-        <div class="app-router-outlet"></div>
+        <div class="layout__wrapper">
+            <div class="layout__inner">
+                <div class="layout__header">
+                    <i class="fas fa-newspaper layout__logo"></i>
+                    <span class="layout__title">Лента новостей</span>
+                </div>
+                <div class="layout__router-outlet"></div>
+                <footer class="layout__footer"></footer>
+            </div>
+        </div>
     </body>
 
 </html>

@@ -1,4 +1,4 @@
-import { TimelineDocTypes } from "./timeline-doctypes.enum";
+import { TimelineDocTypes } from "./timeline-doc-types.enum";
 import { Helpers } from "./helpers";
 
 /** Запись о событии в ленте новостей */

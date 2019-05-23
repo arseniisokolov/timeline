@@ -1,6 +1,6 @@
 import { TimelineEventsService } from "./app/data/services/timeline-events.service";
 import { RouterService } from "./app/data/services/router.service";
-import { TimelineDocTypes } from "./app/data/base/timeline-doctypes.enum";
+import { TimelineDocTypes } from "./app/data/base/timeline-doc-types.enum";
 
 import "./index.scss";
 
@@ -14,7 +14,7 @@ class Application {
             TimelineDocTypes.News,
         ],
         /** Имя BEM-блока router-outlet */
-        routerOutletElem: 'app-router-outlet',
+        routerOutletElem: 'layout__router-outlet',
     };
 
     // singleton-классы

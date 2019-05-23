@@ -1,5 +1,5 @@
 import { TimelineEventModel, ITimelineEvent } from "../base/timeline-event.model";
-import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
+import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
 
 /** Новость о событии */
 export class NewsItemModel extends TimelineEventModel {

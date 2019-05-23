@@ -142,3 +142,7 @@ table {
 a {
     text-decoration: unset;
 }
+
+::-webkit-scrollbar {
+    width: 0px;
+}

@@ -23,7 +23,7 @@ export class AmountModel {
             this._isEmpty = true;
             return;
         }
-        this.Numeric = amount;
+        this.Numeric = isDebet ? (-1 * amount) : amount;
         this.Currency = currency;
         this.Formatted = this.getFormattedAmount(Math.abs(amount), isDebet) + this.getCurrencySign(currency);
     }

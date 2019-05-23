@@ -51,6 +51,7 @@ export class Helpers {
         };
     }
 
+    /** Блокирует событие и останавливает его распространение */
     public static stopPropagation(event: Event) {
         if (!event)
             return;
@@ -81,7 +82,7 @@ export class Helpers {
 
 }
 
-export interface IGrouping<TKey, TElement> {
+interface IGrouping<TKey, TElement> {
     Key: TKey;
     Values: TElement[];
 }

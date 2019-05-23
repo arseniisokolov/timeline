@@ -1,10 +1,11 @@
 import { TimelineEventModel } from "../base/timeline-event.model";
 import { Helpers } from "../base/helpers";
-import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
+import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
 
 export class TimelineListViewModel {
 
     public VisibleItems: TimelineEventModel[];
+    public SortingMode: 'byDate' | 'byType';
 
     private _items: TimelineEventModel[];
 
@@ -23,6 +24,7 @@ export class TimelineListViewModel {
     private initialize(data: ITimelineListInitializeData) {
         this._items = data.items;
         this.VisibleItems = data.items;
+        this.SortingMode = data.sortingMode
         if (data.sortingMode === 'byDate')
             this.sortByDate();
         if (data.sortingMode === 'byType')

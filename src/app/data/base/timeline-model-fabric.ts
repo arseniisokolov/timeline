@@ -1,4 +1,5 @@
-import { TimelineDocTypes } from "./timeline-doctypes.enum";
+
+import { TimelineDocTypes } from "./timeline-doc-types.enum";
 import { TimelineEventModel, ITimelineEvent } from "./timeline-event.model";
 import { TransactionModel, ITransaction } from "../models/transaction.model";
 import { NewsItemModel, INewsItem } from "../models/news-item.model";

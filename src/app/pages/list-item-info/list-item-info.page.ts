@@ -1,15 +1,17 @@
+import { App } from "../../..";
 import { Page } from "../page.base";
+import { TimelineDocTypes } from "../../data/base/timeline-doc-types.enum";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
-import { App } from "../../../app";
-import { TimelineDocTypes } from "../../data/base/timeline-doctypes.enum";
+import { NewsItemModel } from "../../data/models/news-item.model";
 
+//templates and styles
 import { listItemInfoTransactionPageHtml } from "./list-item-info-transaction.page.html";
 import { listItemInfoNewsPageHtml } from "./list-item-info-news.page.html";
-import { NewsItemModel } from "../../data/models/news-item.model";
+import './styles/list-item-info.master.scss'
 
 export class ListItemInfoPage extends Page {
 
-    protected pageBlockName: string = 'list-item-info';
+    protected pageBlockName: string = 'item-info';
 
     private _model: TimelineEventModel;
     private _itemId: string;
@@ -46,28 +48,29 @@ export class ListItemInfoPage extends Page {
     }
 
     private renderData() {
-        this.getElement('list-item-info__title').innerHTML = this._model.Title;
-        this.getElement('list-item-info__description').innerHTML = this._model.Description;
-        const acceptItemBtnElem = this.getElement('list-item-info__accept-btn');
+        this.getElement('item-info__title').innerHTML = this._model.Title;
+        this.getElement('item-info__description').innerHTML = this._model.Description;
+        const acceptItemBtnElem = this.getElement('item-info__accept-btn');
         if (acceptItemBtnElem && this._model instanceof NewsItemModel && this._model.IsVisited)
-            acceptItemBtnElem.classList.add('list-item-info__accept-btn_is-disabled');
+            acceptItemBtnElem.classList.add('item-info__accept-btn_is-disabled');
     }
 
     private checkTemplateEvents() {
-        this.getElement('list-item-info__back-btn').addEventListener('click', () => {
-            App.RouterService.navigate('list');
-        })
-        const deleteItemBtnElem = this.getElement('list-item-info__delete-btn');
-        const acceptItemBtnElem = this.getElement('list-item-info__accept-btn');
+        this.getElement('item-info__back-btn').addEventListener('click', () =>
+            App.RouterService.navigate('list')
+        );
+        const deleteItemBtnElem = this.getElement('item-info__delete-btn');
+        const acceptItemBtnElem = this.getElement('item-info__accept-btn');
         if (deleteItemBtnElem)
-            this.getElement('list-item-info__delete-btn').addEventListener('click', () => {
+            this.getElement('item-info__delete-btn').addEventListener('click', () => {
                 App.TimelineEventsService.deleteItem(this._docType, this._model.Id).subscribe(() => {
                     App.RouterService.navigate('list');
                 });
             })
         if (acceptItemBtnElem)
-            this.getElement('list-item-info__accept-btn').addEventListener('click', () => {
-                (this._model as NewsItemModel).IsVisited = true;
+            this.getElement('item-info__accept-btn').addEventListener('click', () => {
+                if (this._model instanceof NewsItemModel)
+                    this._model.IsVisited = true;
                 App.TimelineEventsService.updateItem(this._docType, this._model.toData()).subscribe(() => {
                     this.initializeAfterRender();
                 });

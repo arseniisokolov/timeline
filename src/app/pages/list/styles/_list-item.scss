@@ -1,0 +1,52 @@
+.list-item {
+    
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 80%;
+    height: auto;
+    margin-bottom: 2rem;
+    padding: 2rem 3rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 10px 6px 11px -5px rgba(40,40,40,0.48);
+    cursor: pointer;
+
+    &__amount {
+        font-size: 1.5rem;
+        margin-right: 3rem;
+        color: $base-color;
+        flex: 1 1 15%;
+    }
+
+    &__date {
+        font-size: 1.5rem;
+        margin-left: 3rem;
+        color: $sub-color;
+        flex: 1 1 20%;
+    }
+
+    &__title {
+        font-size: 2rem;
+        color: $base-color;
+        font-weight: 600;
+        flex: 1 1 65%;
+    }
+
+}
+
+// States 
+.list-item {
+    &__title_is-visited {
+        color: $sub-color;
+        font-weight: initial;
+    }
+
+    &__amount_is-positive {
+        color: #00d746;
+    }
+
+    &__amount_is-negative {
+        color: $accent-color;
+    }
+}

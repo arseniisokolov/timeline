@@ -1,6 +1,5 @@
 export abstract class Page {
 
-
     /** Имя корневого BEM-блока шаблона этой страницы */
     protected abstract pageBlockName: string;
     /** Корневой BEM-блок шаблона этой страницы */

@@ -1,0 +1,40 @@
+.filter-bar {
+    display: flex;
+    align-items: baseline;
+
+    &__caption{
+        color: $base-color;
+        font-size: 2rem;
+        margin-right: 3rem;
+    }
+
+    &__item{
+        text-decoration: underline;
+        color: $base-color;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        cursor: pointer;
+        transition: color .3s;
+    }
+
+    
+}
+
+//States
+.filter-bar {
+
+    &__item:hover {
+        color: $accent-color;
+    }
+
+    &__item_is-active{
+        padding: .3rem;
+        text-decoration: none;
+        border: 1px solid $accent-color;
+        border-radius: .5rem;
+        color: $accent-color;
+        font-weight: 600;
+        cursor: default;
+    }
+
+}

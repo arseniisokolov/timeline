@@ -2,7 +2,7 @@ import { Page } from '../../pages/page.base';
 import { ListPage } from '../../pages/list/list.page';
 import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
 import { NotFoundPage } from '../../pages/not-found/not-found.page';
-import { App } from '../../../app';
+import { App } from '../../..';
 
 export class RouterService {
 
