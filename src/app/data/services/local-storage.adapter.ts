@@ -26,6 +26,7 @@ export class LocalStorageAdapter<T extends { id: string }> {
         return this.get(key).pipe(
             first(),
             map((existItems: T[]) => {
+                debugger;
                 const itemIndex = existItems.findIndex(i => i.id === item.id);
                 if (itemIndex > -1)
                     existItems.splice(itemIndex, 1, item);

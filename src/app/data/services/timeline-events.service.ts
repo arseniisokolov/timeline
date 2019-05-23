@@ -37,11 +37,11 @@ export class TimelineEventsService {
     }
 
     public updateItem(docType: TimelineDocTypes, item: ITimelineEvent): Observable<void> {
-        return this._localStorage.update(docType, item);
+        return this._localStorage.update(docType.toLowerCase(), item);
     }
 
     public deleteItem(docType: TimelineDocTypes, id: string): Observable<void> {
-        return this._localStorage.delete(docType, id);
+        return this._localStorage.delete(docType.toLowerCase(), id);
     }
 
 }

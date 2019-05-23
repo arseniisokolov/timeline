@@ -2,19 +2,19 @@ export abstract class Page {
 
 
     /** Имя корневого BEM-блока шаблона этой страницы */
-    protected abstract blockName: string;
+    protected abstract pageBlockName: string;
     /** Корневой BEM-блок шаблона этой страницы */
-    protected block: Element;
+    protected pageBlock: Element;
 
     /** Выдает html-разметку страницы */
     public abstract getTemplate(): string;
 
     /** Срабатывает после отрисовки шаблона страницы */
     public initializeAfterRender() {
-        this.block = this.getBlock(this.blockName);
+        this.pageBlock = this.getBlock(this.pageBlockName);
     }
 
-    protected initialize(urlParams?: URLSearchParams) {
+    protected initialize() {
     }
 
     /** Ищет BEM-блок по всему html приложения */
@@ -24,7 +24,7 @@ export abstract class Page {
 
     /** Ищет BEM-элемент в пределах текущей страницы */
     protected getElement(name: string): Element {
-        return this.block.getElementsByClassName(name)[0];
+        return this.pageBlock.getElementsByClassName(name)[0];
     }
 
 }

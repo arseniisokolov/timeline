@@ -1,19 +1,15 @@
-import { Page } from "../../base/page";
-import { ListPage } from "../list/list.page";
-import { ListItemInfoPage } from "../list-item-info/list-item-info.page";
-import { NotFoundPage } from "../not-found/not-found.page";
+import { Page } from '../../pages/page.base';
+import { ListPage } from '../../pages/list/list.page';
+import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
+import { NotFoundPage } from '../../pages/not-found/not-found.page';
+import { App } from '../../../app';
 
-const Constants = {
-    routerOutletElem: 'app-router-outlet'
-}
-
-export class LayoutPage {
+export class RouterService {
 
     private _currentRoute: string;
     private _currentPage: Page;
 
     constructor() {
-        this.loadRoute();
         this.checkBrowserButtons();
     }
 
@@ -24,26 +20,32 @@ export class LayoutPage {
         this.renderPage();
     }
 
-    public changeRoute(name: string) {
+    /** Изменить текущий роут */
+    public navigate(name: string) {
         window.history.pushState({}, "TimeLine", `${window.location.origin}/${name}`)
         this.loadRoute();
     }
 
+    public getRouteParams(): URLSearchParams {
+        return new URLSearchParams(window.location.search);
+    }
+
     private getCurrentPage(): Page {
-        const urlParams = new URLSearchParams(window.location.search);
         switch (this._currentRoute) {
             case '/':
-            case '/list': return new ListPage(urlParams);
-            case '/info': return new ListItemInfoPage(urlParams);
-            default: return new NotFoundPage(urlParams);
+            case '/list': return new ListPage();
+            case '/info': return new ListItemInfoPage();
+            default: return new NotFoundPage();
         }
     }
 
     private renderPage() {
         if (!this._currentPage)
             return;
-        const routerOutletEl: Element = window.document.getElementsByClassName(Constants.routerOutletElem)[0];
-        routerOutletEl.innerHTML = this._currentPage.getTemplate();
+        const routerOutletBlock = window.document.getElementsByClassName(App.Config.routerOutletElem)[0];
+        if (!routerOutletBlock)
+            return;
+        routerOutletBlock.innerHTML = this._currentPage.getTemplate();
         this._currentPage.initializeAfterRender();
     }
 

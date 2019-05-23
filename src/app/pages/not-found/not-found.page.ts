@@ -1,13 +1,13 @@
-import { Page } from "../../base/page";
+import { Page } from "../page.base";
 import { notFoundPageHtml } from "./not-found.page.html";
 
 export class NotFoundPage extends Page {
 
-  protected blockName: string = 'not-found';
+  protected pageBlockName: string = 'not-found';
 
-  constructor(urlParams?: URLSearchParams) {
+  constructor() {
     super();
-    this.initialize(urlParams);
+    this.initialize();
   }
 
   public getTemplate(): string {

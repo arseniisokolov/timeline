@@ -1,45 +1,81 @@
-import { Page } from "../../base/page";
-import { listItemInfoPageHtml } from "./list-item-info.page.html";
+import { Page } from "../page.base";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { App } from "../../../app";
 import { TimelineDocTypes } from "../../data/base/timeline-doctypes.enum";
 
+import { listItemInfoTransactionPageHtml } from "./list-item-info-transaction.page.html";
+import { listItemInfoNewsPageHtml } from "./list-item-info-news.page.html";
+import { NewsItemModel } from "../../data/models/news-item.model";
+
 export class ListItemInfoPage extends Page {
 
-    protected blockName: string = 'list-item-info';
+    protected pageBlockName: string = 'list-item-info';
+
     private _model: TimelineEventModel;
+    private _itemId: string;
+    private _docType: TimelineDocTypes;
 
-    private _routeParams: { itemId: string, docType: TimelineDocTypes };
-
-    constructor(urlParams?: URLSearchParams) {
+    constructor() {
         super();
-        this.initialize(urlParams);
+        this.initialize();
     }
 
     public getTemplate(): string {
-        return listItemInfoPageHtml;
+        switch (this._docType) {
+            case TimelineDocTypes.Transaction: return listItemInfoTransactionPageHtml;
+            case TimelineDocTypes.News: return listItemInfoNewsPageHtml;
+        }
     }
 
     public initializeAfterRender() {
         super.initializeAfterRender();
-        if (!this._routeParams.itemId || !this._routeParams.docType)
+        if (!this._itemId || !this._docType) {
+            App.RouterService.navigate('list');
             return;
-        App.TimelineEventsService.getItemById(this._routeParams.docType, this._routeParams.itemId)
+        }
+        App.TimelineEventsService.getItemById(this._docType, this._itemId)
             .subscribe((item: TimelineEventModel) => {
-                if (!item)
+                if (!item) {
+                    App.RouterService.navigate('list');
                     return;
+                }
                 this._model = item;
-                this.getElement('list-item-info__title').innerHTML = this._model.Title;
-                this.getElement('list-item-info__description').innerHTML = this._model.Description;
-            }); 
+                this.renderData();
+                this.checkTemplateEvents();
+            });
     }
 
-    protected initialize(urlParams?: URLSearchParams) {
-        super.initialize(urlParams);
-        this._routeParams = {
-            itemId: urlParams.get('id'),
-            docType: urlParams.get('docType') as TimelineDocTypes
-        };
+    private renderData() {
+        this.getElement('list-item-info__title').innerHTML = this._model.Title;
+        this.getElement('list-item-info__description').innerHTML = this._model.Description;
+        this.getElement('list-item-info__back-btn').addEventListener('click', () => {
+            App.RouterService.navigate('list');
+        })
+    }
+
+    private checkTemplateEvents() {
+        const deleteItemBtnElem = this.getElement('list-item-info__delete-btn');
+        const acceptItemBtnElem = this.getElement('list-item-info__accept-btn');
+        if (deleteItemBtnElem)
+            this.getElement('list-item-info__delete-btn').addEventListener('click', () => {
+                App.TimelineEventsService.deleteItem(this._docType, this._model.Id).subscribe(() => {
+                    App.RouterService.navigate('list');
+                });
+            })
+        if (acceptItemBtnElem)
+            this.getElement('list-item-info__accept-btn').addEventListener('click', () => {
+                (this._model as NewsItemModel).IsVisited = true;
+                App.TimelineEventsService.updateItem(this._docType, this._model.toData()).subscribe(() => {
+                    this.initializeAfterRender();
+                });
+            })
+    }
+
+    protected initialize() {
+        super.initialize();
+        const params = App.RouterService.getRouteParams();
+        this._itemId = params.get('id');
+        this._docType = params.get('docType') as TimelineDocTypes;
     }
 
 }
