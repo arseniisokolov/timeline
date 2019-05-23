@@ -1,4 +1,5 @@
 import { TimelineDocTypes } from "./timeline-doctypes.enum";
+import { Helpers } from "./helpers";
 
 /** Запись о событии в ленте новостей */
 export abstract class TimelineEventModel {
@@ -22,6 +23,11 @@ export abstract class TimelineEventModel {
     public toData(): ITimelineEvent {
         let res: ITimelineEvent = this._snapshot;
         return res;
+    }
+
+    public getFormattedDate(): string {
+        const dateAlias = this.Date.getDay() === new Date().getDay() ? 'сегодня' : Helpers.getFormattedDate(this.Date);
+        return `${Helpers.getFormattedTime(this.Date)}, ${dateAlias}`;
     }
 
 }

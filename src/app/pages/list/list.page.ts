@@ -18,7 +18,7 @@ export class ListPage extends Page {
 
   private initialize() {
     App.TimelineEventsService.getItems(this._docTypes).subscribe(items => {
-      this._viewModel = new TimelineListViewModel({ items });
+      this._viewModel = new TimelineListViewModel({ items, sortingMode: 'byType' });
       console.log(this._viewModel);
     })
   }

@@ -6,10 +6,10 @@ export class Helpers {
     }
 
     /** Форматирует дату в HH:MM:SS */
-    public static getFormattedTime(timestamp: string): string {
-        if (!timestamp)
+    public static getFormattedTime(value: Date | string): string {
+        if (!value)
             return '';
-        const date = new Date(timestamp);
+        const date = typeof value === 'string' ? new Date(value) : value;
         const hours = date.getHours();
         const minutes = date.getMinutes();
         const seconds = date.getSeconds();
@@ -17,10 +17,10 @@ export class Helpers {
     }
 
     /** Форматирует дату в DD.MM.YYYY */
-    public static getFormattedDate(timestamp: string): string {
-        if (!timestamp)
+    public static getFormattedDate(value: Date | string): string {
+        if (!value)
             return '';
-        const date = new Date(timestamp);
+        const date = typeof value === 'string' ? new Date(value) : value;
         const year = date.getFullYear();
         let day = date.getDay().toString();
         let month = (date.getMonth() + 1).toString();
@@ -58,4 +58,31 @@ export class Helpers {
         event.stopPropagation();
     }
 
+    /** Группирует элементы массива по переданному ключу */
+    public static groupBy<T, TKey>(src: T[], fieldFnc: (item: T) => TKey): Array<IGrouping<TKey, T>> {
+        const groupedItems: Array<IGrouping<TKey, T>> = [];
+        let index = 0;
+        while (index <= src.length - 1) {
+            let groupCode = fieldFnc(src[index]);
+            const grouping: IGrouping<TKey, T> = { Key: groupCode, Values: [] };
+            while (!!src[index] && groupCode === fieldFnc(src[index]) && index <= src.length - 1) {
+                groupCode = fieldFnc(src[index]);
+                grouping.Values.push(src[index]);
+                index++;
+            }
+            if (groupedItems.filter(i => i.Key === grouping.Key).length !== 0)
+                groupedItems.map(i => i.Key === grouping.Key ? grouping.Values.map(g => i.Values.push(g)) : i.Values);
+            else
+                groupedItems.push(grouping);
+        }
+        return groupedItems;
+    }
+
+
 }
+
+export interface IGrouping<TKey, TElement> {
+    Key: TKey;
+    Values: TElement[];
+}
+

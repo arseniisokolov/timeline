@@ -4,6 +4,7 @@ import { TimelineDocTypes } from "../base/timeline-doctypes.enum";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
 import { timelineModelsFabric } from "../base/timeline-model-fabric";
+import { Helpers } from "../base/helpers";
 
 export class TimelineEventsService {
 
@@ -46,38 +47,38 @@ export class TimelineEventsService {
 const mock = {
     news: [
         {
-            id: '1',
+            id: Helpers.getGuid(),
             extract: 'Новость года 2018',
             isVisited: false,
             description: 'Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018',
-            docDate: new Date().getTime()
+            docDate: new Date('2018-01-01').getTime()
         },
         {
-            id: '2',
+            id: Helpers.getGuid(),
             extract: 'Новость года 2019',
             isVisited: true,
             description: 'Новость года 2019Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018',
-            docDate: new Date().getTime()
+            docDate: new Date('2019-01-01').getTime()
         },
     ],
     transaction: [
         {
-            id: '1',
+            id: Helpers.getGuid(),
             isDebet: false,
             amount: 123.422,
             senderName: 'Петр',
             currency: 'RUB',
             description: 'Это тебе',
-            docDate: new Date().getTime()
+            docDate: new Date('2018-02-01').getTime()
         },
         {
-            id: '2',
+            id: Helpers.getGuid(),
             isDebet: true,
             amount: 0.32,
             senderName: 'Иван',
             currency: 'USD',
             description: 'Это тебе!',
-            docDate: new Date().getTime()
+            docDate: new Date('2018-01-02').getTime()
         }
     ]
 };
