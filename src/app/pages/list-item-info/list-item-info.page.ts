@@ -48,12 +48,15 @@ export class ListItemInfoPage extends Page {
     private renderData() {
         this.getElement('list-item-info__title').innerHTML = this._model.Title;
         this.getElement('list-item-info__description').innerHTML = this._model.Description;
-        this.getElement('list-item-info__back-btn').addEventListener('click', () => {
-            App.RouterService.navigate('list');
-        })
+        const acceptItemBtnElem = this.getElement('list-item-info__accept-btn');
+        if (acceptItemBtnElem && this._model instanceof NewsItemModel && this._model.IsVisited)
+            acceptItemBtnElem.classList.add('list-item-info__accept-btn_is-disabled');
     }
 
     private checkTemplateEvents() {
+        this.getElement('list-item-info__back-btn').addEventListener('click', () => {
+            App.RouterService.navigate('list');
+        })
         const deleteItemBtnElem = this.getElement('list-item-info__delete-btn');
         const acceptItemBtnElem = this.getElement('list-item-info__accept-btn');
         if (deleteItemBtnElem)
