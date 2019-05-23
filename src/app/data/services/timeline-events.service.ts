@@ -11,18 +11,18 @@ export class TimelineEventsService {
     private _localStorage: LocalStorageAdapter<ITimelineEvent>;
 
     constructor() {
-        this._localStorage = new LocalStorageAdapter<ITimelineEvent>()
+        this._localStorage = new LocalStorageAdapter<ITimelineEvent>();
+        this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), mock[TimelineDocTypes.Transaction.toLowerCase()]).subscribe();
+        this._localStorage.post(TimelineDocTypes.News.toLowerCase(), mock[TimelineDocTypes.News.toLowerCase()]).subscribe();
     }
 
     public getItems(docTypes: TimelineDocTypes[]): Observable<TimelineEventModel[]> {
         return forkJoin(
-            // docTypes.map(docType => this._localStorageAdapter.get(docType.toLowerCase()).pipe(
-            docTypes.map(docType => of(mock[docType.toLowerCase()]).pipe(
+            docTypes.map(docType => this._localStorage.get(docType.toLowerCase()).pipe(
                 map(items => timelineModelsFabric(docType, items))
             ))
         ).pipe(
             map(results => {
-                console.log(results);
                 return results.reduce((acc, item) => [...acc, ...item]);
             }));
     }
