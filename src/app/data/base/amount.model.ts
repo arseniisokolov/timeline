@@ -1,3 +1,5 @@
+import { Helpers } from "./helpers";
+
 /** Модель суммы */
 export class AmountModel {
 
@@ -16,7 +18,8 @@ export class AmountModel {
     private readonly _decimalSeparator: string = ",";
 
     constructor(amount: number, currency: string, isDebet: boolean) {
-        if (amount === undefined || amount === null) {
+        amount = Helpers.parseNumber(amount);
+        if (amount === undefined) {
             this._isEmpty = true;
             return;
         }
