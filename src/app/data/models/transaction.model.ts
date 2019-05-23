@@ -31,6 +31,7 @@ export interface ITransaction extends ITimelineEvent {
 
     amount: number;
     currency: string;
+    /** true - операция расходная (дебет), false - приходная (кредит) */
     isDebet: boolean;
     senderName: string;
 

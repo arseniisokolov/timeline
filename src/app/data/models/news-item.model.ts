@@ -13,10 +13,15 @@ export class NewsItemModel extends TimelineEventModel {
         });
     }
 
+    /** Новость была прочитана */
+    public IsVisited: boolean;
+
     public fromData(data: INewsItem) {
         if (!data)
             return;
         super.fromData(data);
+        this.Title = data.extract;
+        this.IsVisited = data.isVisited;
     }
 
 }
@@ -24,6 +29,7 @@ export class NewsItemModel extends TimelineEventModel {
 /** Новость о событии */
 export interface INewsItem extends ITimelineEvent {
 
-    // на будущее
+    extract: string;
+    isVisited: boolean;
 
 }

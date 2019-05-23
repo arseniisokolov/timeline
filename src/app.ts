@@ -1,36 +1,25 @@
 import "./index.scss";
 import { LayoutPage } from "./app/pages/layout/layout.page";
 import { TransactionModel } from "./app/data/models/transaction.model";
+import { TimelineEventsService } from "./app/data/services/timeline-events.service";
 
-class App {
+class Application {
 
-    private readonly _layout: LayoutPage
+    public TimelineEventsService: TimelineEventsService;
+    private _layout: LayoutPage;
 
     constructor() {
+        this.TimelineEventsService = new TimelineEventsService();
+
+    }
+
+    public start() {
         this._layout = new LayoutPage();
-        console.log(TransactionModel.handleResponse([
-            {
-                id: '1',
-                isDebet: false,
-                amount: 123.422,
-                senderName: 'Петр',
-                currency: 'RUB',
-                description: 'Это тебе',
-                docDate: new Date().getTime()
-            },
-            {
-                id: '2',
-                isDebet: true,
-                amount: 0.32,
-                senderName: 'Иван',
-                currency: 'USD',
-                description: 'Это тебе!',
-                docDate:new Date().getTime()
-            }
-        ]))
     }
 
 }
 
-const app = new App();
+export const App = new Application();
+
+App.start();
 
