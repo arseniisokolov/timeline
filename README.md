@@ -7,7 +7,7 @@
 - для сборки npm run build
 
 ## Как добавить еще один тип оповещений (на примере Запроса перевода):
-Для этого нужно объявить новый тип оповещения, унаследовать модель от базовой модели оповещений, добавить разметку и стили компонента.
+Для этого нужно объявить новый тип оповещения, унаследовать модель от базовой модели оповещений, добавить разметку и стили компонента:
 - в файле <a href="https://github.com/arseniyasokolov/timeline/blob/master/src/app/data/base/timeline-doc-types.enum.ts">timeline-doc-types.enum</a> дополнить енам, дописав в него новый тип оповещения - запрос перевода;
 - создать модель для запроса перевода в папке <a href="https://github.com/arseniyasokolov/timeline/tree/master/src/app/data/models">models</a>. Ее необходимо унаследовать от базовой <a href="https://github.com/arseniyasokolov/timeline/blob/master/src/app/data/base/timeline-event.model.ts">TimelineEventModel</a>. Вместе с моделью создать и интерфейс данных, его также нужно унаследовать от базового <a href="https://github.com/arseniyasokolov/timeline/blob/master/src/app/data/base/timeline-event.model.ts">ITimelineEvent</a>;
 - в файле <a href="https://github.com/arseniyasokolov/timeline/blob/master/src/app/data/base/timeline-model-fabric.ts">timeline-model-fabric</a> добавить кейс: связать новый тип c новой моделью оповещения;
