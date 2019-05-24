@@ -1,3 +1,5 @@
+import { interval, Observable } from "rxjs";
+import { first } from "rxjs/operators";
 import { App } from "../../..";
 import { Page } from "../page.base";
 import { TimelineDocTypes } from "../../data/base/timeline-doc-types.enum";
@@ -8,8 +10,6 @@ import { NewsItemModel } from "../../data/models/news-item.model";
 import { listItemInfoTransactionPageHtml } from "./list-item-info-transaction.page.html";
 import { listItemInfoNewsPageHtml } from "./list-item-info-news.page.html";
 import './styles/list-item-info.master.scss'
-import { interval, Observable } from "rxjs";
-import { first } from "rxjs/operators";
 
 export class ListItemInfoPage extends Page {
 
