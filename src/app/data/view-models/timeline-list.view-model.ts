@@ -5,10 +5,9 @@ import { groupBy } from "../base/helpers";
 export class TimelineListViewModel {
 
     public VisibleItems: TimelineEventModel[];
+    public IsInitialized: boolean;
     /** Способ сортировки */
     public SortingMode: 'byDate' | 'byType';
-    public IsInitialized: boolean;
-    public IsEmpty: boolean;
 
     private _items: TimelineEventModel[] = [];
 
@@ -19,6 +18,9 @@ export class TimelineListViewModel {
         this.IsInitialized = true;
     }
 
+    /** Добавляет новые записи к текущему списку и
+     *  выдает их отсортированными
+     */
     public appendItems(items: TimelineEventModel[]): TimelineEventModel[] {
         this._items = [...this._items, ...items];
         this.VisibleItems = this._items;
@@ -26,6 +28,7 @@ export class TimelineListViewModel {
         return this.VisibleItems.filter(item => items.some(i => item.Id === i.Id));
     }
 
+    /** Сортировать записи по ключу */
     public sortBy(mode: 'byDate' | 'byType') {
         this.SortingMode = mode;
         switch (mode) {
@@ -52,6 +55,7 @@ export class TimelineListViewModel {
 export interface ITimelineListInitializeData {
 
     items?: TimelineEventModel[],
+    /** Способ сортировки */
     sortingMode?: 'byDate' | 'byType';
 
 }

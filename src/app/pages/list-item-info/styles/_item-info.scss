@@ -73,3 +73,19 @@
         background-color: $success-bg-color;
     }
 }
+
+.item-info {
+    @media (max-width: 1170px) {
+        width: 100%;
+
+        &__btn {
+            min-width: 3rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        &__header {
+            align-items: flex-end;
+        }
+    }
+}

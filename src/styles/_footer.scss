@@ -17,3 +17,14 @@
         width: 20%;
     }
 }
+
+
+.footer {
+    @media (max-width: 1170px) {
+        padding-right: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 2rem;
+    }
+}

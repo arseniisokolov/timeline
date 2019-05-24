@@ -16,6 +16,8 @@ export class RouterService {
 
     /** Загружает текущий роут */
     public loadRoute() {
+        if (this._currentPage)
+            this._currentPage.unsubscribeAll();
         this._currentRoute = window.location.pathname;
         this._currentPage = this.getCurrentPage();
         this.renderPage();
@@ -23,11 +25,11 @@ export class RouterService {
 
     /** Изменить текущий роут */
     public navigate(name: string) {
-        this._currentPage.unsubscribeAll();
-        window.history.pushState({}, "TimeLine", `${window.location.origin}/${name}`)
+        window.history.pushState({}, "", `${window.location.origin}/${name}`)
         this.loadRoute();
     }
 
+    /** Выдает текущие параметры строки запроса */
     public getRouteParams(): URLSearchParams {
         return new URLSearchParams(window.location.search);
     }
@@ -47,12 +49,13 @@ export class RouterService {
         const routerOutletBlock = window.document.getElementsByClassName(App.Config.routerOutletElem)[0];
         if (!routerOutletBlock)
             return;
-        this._currentPage.initialize().pipe(first()).subscribe(() => {
+        this._currentPage.initialize().subscribe(() => {
             routerOutletBlock.innerHTML = this._currentPage.getTemplate();
             this._currentPage.initializeAfterRender();
         });
     }
 
+    /** Отслеживает переходы вперед/назад в браузере */
     private checkBrowserButtons() {
         window.addEventListener("popstate", () => {
             if (window.location.pathname === this._currentRoute)

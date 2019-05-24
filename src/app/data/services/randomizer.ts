@@ -5,6 +5,7 @@ import { INewsItem } from "../models/news-item.model";
 import { ITimelineEvent } from "../base/timeline-event.model";
 import * as Helpers from "../base/helpers";
 
+/** Генератор случайных записей */
 export class Randomizer {
 
     public getRandomData(docType: TimelineDocTypes): Observable<ITimelineEvent> {

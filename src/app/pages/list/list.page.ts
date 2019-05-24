@@ -54,7 +54,6 @@ export class ListPage extends Page {
         this.renderItems(this._viewModel.VisibleItems);
         interval(5000).pipe(takeUntil(this._unsubscriber))
             .subscribe(() => {
-                console.log('adterRender 5000');
                 App.TimelineEventsService.getItems(App.Config.listDocTypes, true).pipe(first())
                     .subscribe(items => {
                         if (!items.length)
@@ -76,7 +75,6 @@ export class ListPage extends Page {
             this._viewModel = new TimelineListViewModel();
             App.TimelineEventsService.getItems(App.Config.listDocTypes).pipe(takeUntil(this._unsubscriber))
                 .subscribe(items => {
-                    debugger;
                     this._viewModel.initialize({ items, sortingMode: 'byDate' });
                     subscriber.next();
                 });
@@ -117,11 +115,13 @@ export class ListPage extends Page {
         if (item instanceof TransactionModel) {
             node.innerHTML = `
         <div class="list-item list-item_${item.Id}">
-            <div class="list-item__amount ${
-                item.Amount.Numeric > 0 ? 'list-item__amount_is-positive' : 'list-item__amount_is-negative'
-                }">${item.Amount.Formatted}
+            <div class="list-item__main-info">
+                <div class="list-item__amount ${
+                    item.Amount.Numeric > 0 ? 'list-item__amount_is-positive' : 'list-item__amount_is-negative'
+                    }">${item.Amount.Formatted}
+                </div>
+                <div class="list-item__title">${item.Title}</div>
             </div>
-            <div class="list-item__title">${item.Title}</div>
             <div class="list-item__date">${item.getFormattedDate()}</div>
         </div>`;
         }

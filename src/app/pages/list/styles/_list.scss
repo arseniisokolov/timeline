@@ -30,3 +30,12 @@
         visibility: hidden;
     }
 }
+
+
+.list {
+    @media (max-width: 1170px) {
+        &__body {
+            padding-right: 2rem;
+        }
+    }
+}

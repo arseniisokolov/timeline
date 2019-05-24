@@ -17,7 +17,7 @@
         font-size: 1.5rem;
         margin-right: 3rem;
         color: $base-color;
-        flex: 1 1 22%;
+        width: 25%;
     }
 
     &__date {
@@ -30,9 +30,13 @@
     &__title {
         font-size: 2rem;
         color: $base-color;
-        flex: 1 1 65%;
     }
 
+    &__main-info {
+        display: flex;
+        align-items: baseline;
+        flex: 1 1 80%;
+    }
 }
 
 // States 
@@ -56,5 +60,26 @@
 
     &__amount_is-negative {
         color: $accent-color;
+    }
+}
+
+.list-item {
+    @media (max-width: 1170px) {
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        &__main-info {
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        &__amount {
+            width: 100%;
+        }
+
+        &__date {
+            font-size: 1.5rem;
+        }
     }
 }

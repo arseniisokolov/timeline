@@ -11,18 +11,18 @@ export abstract class Page {
     /** Выдает html-разметку страницы */
     public abstract getTemplate(): string;
 
-    /** Срабатывает после отрисовки шаблона страницы */
+    /** Инициализация после отрисовки */
     public initializeAfterRender() {
         this.pageBlock = this.getBlock(this.pageBlockName);
     }
 
     /** Отписаться от всех асинхронных подписок */
-    public unsubscribeAll(){
-        console.log(this.pageBlockName, ' unsubscribe');
+    public unsubscribeAll() {
         this._unsubscriber.next();
         this._unsubscriber.complete();
     }
 
+    /** Инициализация до отрисовки */
     public abstract initialize(): Observable<void>;
 
     /** Ищет BEM-блок по всему html приложения */
