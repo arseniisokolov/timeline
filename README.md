@@ -1,7 +1,10 @@
 # timeline
 Лента оповещений
 
-## Как запустить:
+### Технологии и методологии:
+TypeScript + SASS + BEM + Webpack
+
+### Как запустить:
 - npm i
 - npm run dev
 - для сборки npm run build
