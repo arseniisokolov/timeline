@@ -1,3 +1,4 @@
+import { first } from 'rxjs/operators';
 import { Page } from '../../pages/page.base';
 import { ListPage } from '../../pages/list/list.page';
 import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
@@ -22,6 +23,7 @@ export class RouterService {
 
     /** Изменить текущий роут */
     public navigate(name: string) {
+        this._currentPage.unsubscribeAll();
         window.history.pushState({}, "TimeLine", `${window.location.origin}/${name}`)
         this.loadRoute();
     }
@@ -45,8 +47,10 @@ export class RouterService {
         const routerOutletBlock = window.document.getElementsByClassName(App.Config.routerOutletElem)[0];
         if (!routerOutletBlock)
             return;
-        routerOutletBlock.innerHTML = this._currentPage.getTemplate();
-        this._currentPage.initializeAfterRender();
+        this._currentPage.initialize().pipe(first()).subscribe(() => {
+            routerOutletBlock.innerHTML = this._currentPage.getTemplate();
+            this._currentPage.initializeAfterRender();
+        });
     }
 
     private checkBrowserButtons() {

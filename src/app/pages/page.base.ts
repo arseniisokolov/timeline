@@ -1,9 +1,12 @@
+import { Observable, Subject } from "rxjs";
+
 export abstract class Page {
 
     /** Имя корневого BEM-блока шаблона этой страницы */
     protected abstract pageBlockName: string;
     /** Корневой BEM-блок шаблона этой страницы */
     protected pageBlock: Element;
+    protected _unsubscriber: Subject<void> = new Subject<void>();
 
     /** Выдает html-разметку страницы */
     public abstract getTemplate(): string;
@@ -13,8 +16,14 @@ export abstract class Page {
         this.pageBlock = this.getBlock(this.pageBlockName);
     }
 
-    protected initialize() {
+    /** Отписаться от всех асинхронных подписок */
+    public unsubscribeAll(){
+        console.log(this.pageBlockName, ' unsubscribe');
+        this._unsubscriber.next();
+        this._unsubscriber.complete();
     }
+
+    public abstract initialize(): Observable<void>;
 
     /** Ищет BEM-блок по всему html приложения */
     protected getBlock(name: string): Element {

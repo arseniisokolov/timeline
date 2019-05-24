@@ -1,6 +1,7 @@
+import { interval, Observable } from "rxjs";
 import { App } from "../../..";
 import { Page } from "../page.base";
-import { Helpers } from "../../data/base/helpers";
+import { stopPropagation } from "../../data/base/helpers";
 import { TimelineListViewModel } from "../../data/view-models/timeline-list.view-model";
 import { TransactionModel } from "../../data/models/transaction.model";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
@@ -9,15 +10,16 @@ import { NewsItemModel } from "../../data/models/news-item.model";
 //templates and styles
 import { listPageHtml } from "./list.page.html";
 import './styles/list.master.scss';
+import { takeUntil, first } from "rxjs/operators";
 
 export class ListPage extends Page {
 
     protected pageBlockName: string = 'list';
     private _viewModel: TimelineListViewModel;
+    private _isFilterElemVisible: boolean;
 
     constructor() {
         super();
-        this.initialize();
     }
 
     public getTemplate(): string {
@@ -25,6 +27,8 @@ export class ListPage extends Page {
     }
 
     public initializeAfterRender() {
+        if (!this._viewModel.IsInitialized)
+            return;
         super.initializeAfterRender();
         const dateBtnElem = this.getElement('filter-bar__item_by-date');
         const typeBtnElem = this.getElement('filter-bar__item_by-type');
@@ -35,46 +39,83 @@ export class ListPage extends Page {
         dateBtnElem.addEventListener('click', () => {
             dateBtnElem.classList.add('filter-bar__item_is-active');
             typeBtnElem.classList.remove('filter-bar__item_is-active');
-            this._viewModel.sortByDate();
-            this.renderItems();
-        }
-        );
+            this._viewModel.sortBy('byDate');
+            this.getElement('list__body').innerHTML = '';
+            this.renderItems(this._viewModel.VisibleItems);
+        });
         typeBtnElem.addEventListener('click', () => {
             typeBtnElem.classList.add('filter-bar__item_is-active');
             dateBtnElem.classList.remove('filter-bar__item_is-active');
-            this._viewModel.sortByType();
-            this.renderItems();
+            this._viewModel.sortBy('byType');
+            this.getElement('list__body').innerHTML = '';
+            this.renderItems(this._viewModel.VisibleItems);
         });
-        this.renderItems();
+        this.renderFilter();
+        this.renderItems(this._viewModel.VisibleItems);
+        interval(5000).pipe(takeUntil(this._unsubscriber))
+            .subscribe(() => {
+                console.log('adterRender 5000');
+                App.TimelineEventsService.getItems(App.Config.listDocTypes, true).pipe(first())
+                    .subscribe(items => {
+                        if (!items.length)
+                            return;
+                        if (this._viewModel.SortingMode === 'byDate') {
+                            this.renderItems(this._viewModel.appendItems(items));
+                        } else {
+                            this._viewModel.appendItems(items)
+                            this.getElement('list__body').innerHTML = '';
+                            this.renderItems(this._viewModel.VisibleItems);
+                        }
+                        this.renderFilter();
+                    });
+            });
     }
 
-    protected initialize() {
-        super.initialize();
-        App.TimelineEventsService.getItems(App.Config.listDocTypes).subscribe(items => {
-            this._viewModel = new TimelineListViewModel({ items, sortingMode: 'byDate' });
+    public initialize(): Observable<void> {
+        return new Observable<void>(subscriber => {
+            this._viewModel = new TimelineListViewModel();
+            App.TimelineEventsService.getItems(App.Config.listDocTypes).pipe(takeUntil(this._unsubscriber))
+                .subscribe(items => {
+                    debugger;
+                    this._viewModel.initialize({ items, sortingMode: 'byDate' });
+                    subscriber.next();
+                });
         })
     }
 
-    private renderItems() {
-        if (!this._viewModel.VisibleItems.length) {
+    private renderItems(items: TimelineEventModel[]) {
+        if (!items.length)
+            return;
+        const listElem = this.getElement('list__body');
+        const loader = this.getElement('list__loader');
+        if (loader)
+            loader.remove();
+        items.forEach(item => {
+            const itemElem = this.getItemTemplate(item);
+            listElem.insertBefore(itemElem, listElem.firstChild);
+            itemElem.addEventListener('click', (e: Event) => {
+                stopPropagation(e);
+                App.RouterService.navigate(`info?id=${item.Id}&docType=${item.DocType}`);
+            });
+        });
+    }
+
+    private renderFilter() {
+        if (this._isFilterElemVisible)
+            return;
+        if (!this._viewModel.IsInitialized || !this._viewModel.VisibleItems.length) {
             this.getElement('list__filter-bar').classList.add('list__filter-bar_is-hidden');
+            this._isFilterElemVisible = false;
             return;
         }
         this.getElement('list__filter-bar').classList.remove('list__filter-bar_is-hidden');
-        this.getElement('list__body').innerHTML = this._viewModel.VisibleItems
-            .map(item => this.getItemTemplate(item))
-            .reduce((acc, item) => acc + item);
-        this._viewModel.VisibleItems.forEach(item => {
-            this.getElement(`list-item_${item.Id}`).addEventListener('click', (e: Event) => {
-                Helpers.stopPropagation(e);
-                App.RouterService.navigate(`info?id=${item.Id}&docType=${item.DocType}`);
-            });
-        })
+        this._isFilterElemVisible = true;
     }
 
     private getItemTemplate(item: TimelineEventModel) {
+        const node: Element = document.createElement('div');
         if (item instanceof TransactionModel) {
-            return `
+            node.innerHTML = `
         <div class="list-item list-item_${item.Id}">
             <div class="list-item__amount ${
                 item.Amount.Numeric > 0 ? 'list-item__amount_is-positive' : 'list-item__amount_is-negative'
@@ -85,13 +126,14 @@ export class ListPage extends Page {
         </div>`;
         }
         if (item instanceof NewsItemModel) {
-            return `
+            node.innerHTML = `
         <div class="list-item list-item_${item.Id}">
-            <div class="list-item__title ${
+            <div class="list-item__title list-item__title_is-new ${
                 item.IsVisited ? 'list-item__title_is-visited' : ''
                 }">${item.Title}</div>
         </div>`;
         }
+        return node;
     }
 
 }

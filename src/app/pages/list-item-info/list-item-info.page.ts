@@ -8,7 +8,7 @@ import { NewsItemModel } from "../../data/models/news-item.model";
 import { listItemInfoTransactionPageHtml } from "./list-item-info-transaction.page.html";
 import { listItemInfoNewsPageHtml } from "./list-item-info-news.page.html";
 import './styles/list-item-info.master.scss'
-import { interval } from "rxjs";
+import { interval, Observable } from "rxjs";
 import { first } from "rxjs/operators";
 
 export class ListItemInfoPage extends Page {
@@ -21,7 +21,6 @@ export class ListItemInfoPage extends Page {
 
     constructor() {
         super();
-        this.initialize();
     }
 
     public getTemplate(): string {
@@ -47,6 +46,15 @@ export class ListItemInfoPage extends Page {
                 this.renderData();
                 this.checkTemplateEvents();
             });
+    }
+
+    public initialize(): Observable<void> {
+        return new Observable(subscriber => {
+            const params = App.RouterService.getRouteParams();
+            this._itemId = params.get('id');
+            this._docType = params.get('docType') as TimelineDocTypes;
+            subscriber.next();
+        })
     }
 
     private renderData() {
@@ -77,13 +85,6 @@ export class ListItemInfoPage extends Page {
                     this.initializeAfterRender();
                 });
             })
-    }
-
-    protected initialize() {
-        super.initialize();
-        const params = App.RouterService.getRouteParams();
-        this._itemId = params.get('id');
-        this._docType = params.get('docType') as TimelineDocTypes;
     }
 
 }

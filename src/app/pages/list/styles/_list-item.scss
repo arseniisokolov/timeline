@@ -17,7 +17,7 @@
         font-size: 1.5rem;
         margin-right: 3rem;
         color: $base-color;
-        flex: 1 1 15%;
+        flex: 1 1 22%;
     }
 
     &__date {
@@ -30,7 +30,6 @@
     &__title {
         font-size: 2rem;
         color: $base-color;
-        font-weight: 600;
         flex: 1 1 65%;
     }
 
@@ -40,6 +39,10 @@
 .list-item {
     &:hover {
         box-shadow: 10px 6px 7px 0px rgba(40, 40, 40, 0.6);
+    }
+
+    &__title_is-new {
+        font-weight: 600;
     }
 
     &__title_is-visited {

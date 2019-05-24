@@ -1,4 +1,4 @@
-import { Helpers } from "./helpers";
+import { parseNumber } from "./helpers";
 
 /** Модель суммы */
 export class AmountModel {
@@ -18,14 +18,14 @@ export class AmountModel {
     private readonly _decimalSeparator: string = ",";
 
     constructor(amount: number, currency: string, isDebet: boolean) {
-        amount = Helpers.parseNumber(amount);
+        amount =  parseNumber(amount);
         if (amount === undefined) {
             this._isEmpty = true;
             return;
         }
         this.Numeric = isDebet ? (-1 * amount) : amount;
         this.Currency = currency;
-        this.Formatted = this.getFormattedAmount(Math.abs(amount), isDebet) + this.getCurrencySign(currency);
+        this.Formatted = `${this.getFormattedAmount(Math.abs(amount), isDebet)} ${this.getCurrencySign(currency)}`;
     }
 
     private getFormattedAmount(amount: number, isDebet: boolean): string {

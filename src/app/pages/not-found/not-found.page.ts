@@ -3,6 +3,7 @@ import { Page } from "../page.base";
 //templates and styles
 import { notFoundPageHtml } from "./not-found.page.html";
 import './styles/not-found.master.scss';
+import { Observable, of } from "rxjs";
 
 export class NotFoundPage extends Page {
 
@@ -10,7 +11,10 @@ export class NotFoundPage extends Page {
 
   constructor() {
     super();
-    this.initialize();
+  }
+
+  public initialize(): Observable<void> {
+    return of();
   }
 
   public getTemplate(): string {

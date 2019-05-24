@@ -1,30 +1,53 @@
-import { Observable, forkJoin, of } from "rxjs";
+import { Observable, forkJoin, interval } from "rxjs";
 import { map, first } from "rxjs/operators";
 import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
 import { timelineModelsFabric } from "../base/timeline-model-fabric";
-import { Helpers } from "../base/helpers";
+import { Randomizer } from "./randomizer";
 
 export class TimelineEventsService {
 
     private _localStorage: LocalStorageAdapter<ITimelineEvent>;
+    private _lastIdsCache: { [key: string]: string } = {};
 
     constructor() {
         this._localStorage = new LocalStorageAdapter<ITimelineEvent>();
-        // this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), mock[TimelineDocTypes.Transaction.toLowerCase()]).subscribe();
-        this._localStorage.post(TimelineDocTypes.News.toLowerCase(), mock[TimelineDocTypes.News.toLowerCase()]).subscribe();
+        const randomizer = new Randomizer();
+        interval(10000).subscribe(() => {
+            randomizer.getRandomData(TimelineDocTypes.Transaction).subscribe(data => {
+                this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), [data]).subscribe();
+            });
+            randomizer.getRandomData(TimelineDocTypes.News).subscribe(data => {
+                this._localStorage.post(TimelineDocTypes.News.toLowerCase(), [data]).subscribe();
+            });
+
+        })
     }
 
-    public getItems(docTypes: TimelineDocTypes[]): Observable<TimelineEventModel[]> {
+    public getItems(docTypes: TimelineDocTypes[], onlyLatest?: boolean): Observable<TimelineEventModel[]> {
         return forkJoin(
             docTypes.map(docType =>
                 this._localStorage.get(docType.toLowerCase()).pipe(
-                    map(items => timelineModelsFabric(docType, items))
+                    map(items => {
+                        if (!items)
+                            return;
+                        let filteredItems = items;
+                        if (onlyLatest) {
+                            if (this._lastIdsCache[docType]) {
+                                const index = items.findIndex(i => i.id === this._lastIdsCache[docType]);
+                                filteredItems = index > -1 ? items.slice(index + 1) : items;
+                            }
+                        }
+                        if (filteredItems.length)
+                            this._lastIdsCache[docType] = filteredItems[filteredItems.length - 1].id;
+                        return timelineModelsFabric(docType, filteredItems);
+                    })
                 )
             )
         ).pipe(
             map(results => {
+                console.log(results.reduce((acc, item) => [...acc, ...item]));
                 return results.reduce((acc, item) => [...acc, ...item]);
             }));
     }
@@ -45,42 +68,3 @@ export class TimelineEventsService {
     }
 
 }
-
-const mock = {
-    news: [
-        {
-            id: Helpers.getGuid(),
-            extract: 'Новость года 2018',
-            isVisited: false,
-            description: 'Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018',
-            docDate: new Date('2018-01-01').getTime()
-        },
-        {
-            id: Helpers.getGuid(),
-            extract: 'Новость года 2019',
-            isVisited: true,
-            description: 'Новость года 2019Новость года 2018Новость года 2018Новость года 2018Новость года 2018Новость года 2018',
-            docDate: new Date('2019-01-01').getTime()
-        },
-    ],
-    transaction: [
-        {
-            id: Helpers.getGuid(),
-            isDebet: false,
-            amount: 123.422,
-            senderName: 'Петр',
-            currency: 'RUB',
-            description: 'Это тебе',
-            docDate: new Date().getTime()
-        },
-        {
-            id: Helpers.getGuid(),
-            isDebet: true,
-            amount: 0.32,
-            senderName: 'Иван',
-            currency: 'USD',
-            description: 'Это тебе!',
-            docDate: new Date('2018-01-02').getTime()
-        }
-    ]
-};

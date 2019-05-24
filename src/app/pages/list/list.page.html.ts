@@ -12,7 +12,7 @@
     </div>
     <div class="list__body-wrapper">
         <div class="list__body">
-            Новостей пока нет. Скоро появятся!
+            <div class="list__loader"> Новостей пока нет. Скоро появятся!</div>
         </div>
     </div>
 </div>
