@@ -18,8 +18,8 @@
 
     &__header {
         width: 100%;
-        flex: 1 1 10%;
-        padding: 5rem 0 1rem 6rem;
+        flex: 1 1 8%;
+        padding: 3rem 0 1rem 6rem;
     }
 
     &__logo {
@@ -37,7 +37,7 @@
     }
 
     &__router-outlet {
-        flex: 1 1 80%;
+        flex: 1 1 87%;
         width: 100%;
         min-height: 470px;
         padding: 2rem 6rem;
@@ -47,7 +47,7 @@
 
     &__footer {
         width: 100%;
-        flex: 1 1 10%;
+        flex: 1 1 5%;
     }
 
     &__about {
@@ -76,10 +76,11 @@
         }
 
         &__header {
-            height: 11rem;
+            height: 9rem;
             position: fixed;
             top: 0;
             left: 0;
+            padding-top: 2rem;
             background-color: white;
         }
 
@@ -88,26 +89,23 @@
             bottom: 0;
             left: 0;
             background-color: white;
+            padding: 1rem 2rem;
         }
 
         &__router-outlet {
             overflow: visible;
-            margin-top: 11rem;
+            margin-top: 9rem;
         }
     }
     @media (max-width: 768px) {
         &__router-outlet {
-            padding: 2rem;
+            padding: 1rem 2rem;
+            margin-top: 7rem;
         }
 
         &__header {
             padding-left: 2rem;
-            padding-top: 4rem;
-            height: 9rem;
-        }
-
-        &__router-outlet {
-            margin-top: 9rem;
+            height: 7rem;
         }
     }
 }

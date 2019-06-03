@@ -1,7 +1,8 @@
 .filter-bar {
     display: flex;
     align-items: baseline;
-    padding-top: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
 
     &__item {
         font-family: $sub-font;

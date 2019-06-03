@@ -3,19 +3,18 @@
     height: 100%;
 
     &__filter-bar {
-        height: 12%;
+        height: auto;
         width: auto;
     }
 
     &__body-wrapper {
-        height: 85%;
+        height: 90%;
         width: 100%;
         overflow: auto;
     }
 
     &__body {
         width: 100%;
-        padding: 2rem 0;
     }
     
     &__loader {
@@ -34,6 +33,11 @@
 
 .list {
     @media (max-width: 1170px) {
+        &__body {
+            padding-right: 10%;
+        }
+    }
+    @media (max-width: 768px) {
         &__body {
             padding-right: 2rem;
         }

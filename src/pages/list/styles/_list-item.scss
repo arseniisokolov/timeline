@@ -5,7 +5,8 @@
     justify-content: space-between;
     width: 70%;
     height: auto;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 2rem 3rem;
     background-color: white;
     border-radius: .5rem;
@@ -80,6 +81,7 @@
 
         &__amount {
             width: 100%;
+            margin-bottom: 1rem;
         }
 
         &__date {
