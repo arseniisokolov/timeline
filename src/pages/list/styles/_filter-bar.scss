@@ -1,0 +1,32 @@
+.filter-bar {
+    display: flex;
+    align-items: baseline;
+    padding-top: 2rem;
+
+    &__item {
+        font-family: $sub-font;
+        text-decoration: underline;
+        color: $sub-color;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+        cursor: pointer;
+        transition: .3s;
+    }
+}
+
+//States
+.filter-bar {
+    &__item:hover {
+        color: $base-color;
+    }
+
+    &__item_is-active{
+        padding: .3rem;
+        text-decoration: none;
+        border: 1px solid $sub-color;
+        border-radius: .5rem;
+        color: $base-color;
+        font-weight: 600;
+        cursor: default;
+    }
+}

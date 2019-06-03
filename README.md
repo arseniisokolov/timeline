@@ -2,7 +2,7 @@
 Лента оповещений
 
 ### Технологии и методологии:
-TypeScript + SASS + BEM + Webpack
+TypeScript + RxJS + SASS + BEM + Webpack
 
 ### Как запустить:
 - npm i
