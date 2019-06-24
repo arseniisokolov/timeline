@@ -1,8 +1,9 @@
 import { Page } from '../../pages/page.base';
-import { ListPage } from '../../pages/list/list.page';
-import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
-import { NotFoundPage } from '../../pages/not-found/not-found.page';
+// import { ListPage } from '../../pages/list/list.page';
+// import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
+// import { NotFoundPage } from '../../pages/not-found/not-found.page';
 import { App } from '../../index/index';
+import { MainPage } from '../../pages/main/main.page';
 
 export class RouterService {
 
@@ -15,8 +16,8 @@ export class RouterService {
 
     /** Загружает текущий роут */
     public loadRoute() {
-        if (this._currentPage)
-            this._currentPage.unsubscribeAll();
+        // if (this._currentPage)
+        //     this._currentPage.unsubscribeAll();
         this._currentRoute = window.location.pathname;
         this._currentPage = this.getCurrentPage();
         this.renderPage();
@@ -36,9 +37,9 @@ export class RouterService {
     private getCurrentPage(): Page {
         switch (this._currentRoute) {
             case '/':
-            case '/list': return new ListPage();
-            case '/info': return new ListItemInfoPage();
-            default: return new NotFoundPage();
+            case '/list': return new MainPage();
+            // case '/info': return new ListItemInfoPage();
+            // default: return new NotFoundPage();
         }
     }
 
@@ -49,7 +50,7 @@ export class RouterService {
         if (!routerOutletBlock)
             return;
         this._currentPage.initialize().subscribe(() => {
-            routerOutletBlock.innerHTML = this._currentPage.getTemplate();
+            // routerOutletBlock.innerHTML = this._currentPage.renderTemplate();
             this._currentPage.initializeAfterRender();
         });
     }
