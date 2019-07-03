@@ -6,13 +6,14 @@ import { Page } from "../page.base";
 import { getMainPageHtml } from "./main.page.template";
 import { HeaderComponent } from "../../components/header/header.component";
 import { TemplateStateType } from "../../components/component.base";
+import { FooterComponent } from "../../components/footer/footer.component";
 
 export class MainPage extends Page {
 
     constructor() {
         super({
             bemBlock: 'layout__inner',
-            templateState: { Title: '...' },
+            templateState: {},
         });
     }
 
@@ -20,11 +21,16 @@ export class MainPage extends Page {
 
     public initializeAfterRender() {
         super.initializeAfterRender();
-        const headerElem = new HeaderComponent({
+        const headerBlock = new HeaderComponent({
             bemBlock: 'layout__header',
             templateState: { Title: 'Лента оповещений' },
         });
-        headerElem.renderTemplate();
+        const footerBlock = new FooterComponent({
+            bemBlock: 'layout__footer',
+            templateState: {}
+        });
+        headerBlock.renderTemplate();
+        footerBlock.renderTemplate();
     }
 
     public initialize(): Observable<void> {

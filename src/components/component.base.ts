@@ -85,6 +85,6 @@ export type ComponentStateType = {
 
 
 export type TemplateStateType = {
-    Title: string;
+    Title?: string;
     Caption?: string;
 };
