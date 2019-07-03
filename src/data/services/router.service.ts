@@ -1,29 +1,37 @@
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Page } from '../../pages/page.base';
-// import { ListPage } from '../../pages/list/list.page';
-// import { ListItemInfoPage } from '../../pages/list-item-info/list-item-info.page';
-// import { NotFoundPage } from '../../pages/not-found/not-found.page';
 import { App } from '../../index/index';
-import { MainPage } from '../../pages/main/main.page';
+import { AppRoutingTree, RoutingTreeType } from '../../pages/routing-tree';
+import { NotFoundPage } from '../../pages/not-found/not-found.page';
 
+/** TO DO: сейчас при каждом loadRoute дерево перерисовывается полностью. Добавить умную проверку рутов. */
 export class RouterService {
 
-    private _currentRoute: string;
     private _currentPage: Page;
+    private _currentPath: string;
+    private _currentRouteNode: string;
+    private _routes: string[];
+    private _currentRouterOutlet: string;
+    private _currentRoutingTree: RoutingTreeType;
 
     constructor() {
         this.checkBrowserButtons();
     }
 
-    /** Загружает текущий роут */
+    /** Загружает текущий рут */
     public loadRoute() {
-        // if (this._currentPage)
-        //     this._currentPage.unsubscribeAll();
-        this._currentRoute = window.location.pathname;
-        this._currentPage = this.getCurrentPage();
-        this.renderPage();
+        this._currentPath = window.location.pathname.replace('/', '');
+        this._routes = this._currentPath.split('/');
+        this._currentRouteNode = this._routes[0];
+        if (!this._currentRouteNode)
+            this.navigate('main');
+        this._currentRoutingTree = AppRoutingTree;
+        this._currentRouterOutlet = App.Config.routerOutletElem;
+        this.handleRouteNode();
     }
 
-    /** Изменить текущий роут */
+    /** Перейти на рут */
     public navigate(name: string) {
         window.history.pushState({}, "", `${window.location.origin}/${name}`)
         this.loadRoute();
@@ -34,31 +42,35 @@ export class RouterService {
         return new URLSearchParams(window.location.search);
     }
 
-    private getCurrentPage(): Page {
-        switch (this._currentRoute) {
-            case '/':
-            case '/list': return new MainPage();
-            // case '/info': return new ListItemInfoPage();
-            // default: return new NotFoundPage();
+    private handleRouteNode() {
+        const routeNode = this._currentRoutingTree[this._currentRouteNode];
+        if (!routeNode) {
+            this._currentPage = new NotFoundPage({ bemBlock: this._currentRouterOutlet });
+            this.renderPage(this._currentPage).subscribe();
+            return;
         }
+        this._currentPage = routeNode.getPage({ bemBlock: this._currentRouterOutlet });
+        this.renderPage(this._currentPage).subscribe(() => {
+            /** TO DO: сделать так, чтобы аутлет искался не по классу, а просто брался текущий элемент */
+            const currentIndex = this._routes.indexOf(this._currentRouteNode);
+            this._currentRouteNode = this._routes[currentIndex + 1];
+            const routerOutletElem = this._currentPage.getBemBlock().querySelector('[router-outlet]');
+            if (!routeNode.children)
+                return;
+            this._currentRouterOutlet = routerOutletElem.className;
+            this._currentRoutingTree = routeNode.children;
+            this.handleRouteNode();
+        });
     }
 
-    private renderPage() {
-        if (!this._currentPage)
-            return;
-        const routerOutletBlock = window.document.getElementsByClassName(App.Config.routerOutletElem)[0];
-        if (!routerOutletBlock)
-            return;
-        this._currentPage.initialize().subscribe(() => {
-            // routerOutletBlock.innerHTML = this._currentPage.renderTemplate();
-            this._currentPage.initializeAfterRender();
-        });
+    private renderPage(page: Page): Observable<void> {
+        return page.initialize().pipe(tap(() => page.initializeAfterRender()));
     }
 
     /** Отслеживает переходы вперед/назад в браузере */
     private checkBrowserButtons() {
         window.addEventListener("popstate", () => {
-            if (window.location.pathname === this._currentRoute)
+            if (window.location.pathname === this._currentPath)
                 return;
             this.loadRoute();
         });

@@ -1,26 +1,21 @@
-import { Observable, of } from "rxjs";
-
 import { Page } from "../page.base";
 
 //templates and styles
-import { getMainPageHtml } from "./main.page.template";
+import { getMainPageTemplate } from "./main.page.template";
 import { HeaderComponent } from "../../components/header/header.component";
-import { TemplateStateType } from "../../components/component.base";
+import { TemplateStateType, ComponentStateType } from "../../components/component.base";
 import { FooterComponent } from "../../components/footer/footer.component";
 
 export class MainPage extends Page {
 
-    constructor() {
-        super({
-            bemBlock: 'layout__inner',
-            templateState: {},
-        });
+    constructor(state: ComponentStateType) {
+        super(state);
     }
 
-    protected getTemplate: (state: TemplateStateType) => string = getMainPageHtml;
+    protected getTemplate: (state: TemplateStateType) => string = getMainPageTemplate;
 
-    public initializeAfterRender() {
-        super.initializeAfterRender();
+    public initializeComponents() {
+        super.initializeComponents();
         const headerBlock = new HeaderComponent({
             bemBlock: 'layout__header',
             templateState: { Title: 'Лента оповещений' },
@@ -31,11 +26,6 @@ export class MainPage extends Page {
         });
         headerBlock.renderTemplate();
         footerBlock.renderTemplate();
-    }
-
-    public initialize(): Observable<void> {
-        this.renderTemplate();
-        return of(null);
     }
 
 }

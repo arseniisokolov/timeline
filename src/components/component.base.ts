@@ -79,7 +79,7 @@ export abstract class Component {
 
 export type ComponentStateType = {
     bemBlock: string;
-    templateState: TemplateStateType;
+    templateState?: TemplateStateType;
     data?: any & {};
 }
 
