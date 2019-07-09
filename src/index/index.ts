@@ -1,5 +1,5 @@
 import { TimelineEventsService } from "../data/services/timeline-events.service";
-import { RouterService } from "../data/services/router.service";
+import { RouterService } from "../data/router/router.service";
 import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
 
 import "./styles/index.scss";

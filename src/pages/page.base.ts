@@ -15,12 +15,13 @@ export abstract class Page extends Component {
         return of(null);
     };
 
-    public getBemBlock(): Element {
-        return this.bemBlockElem;
+    public getInnerRouterOutletBlock(): string {
+        const elem = this.bemBlockElem.querySelector('[router-outlet]');
+        return elem ? elem.className : '';
     }
 
     protected initializeComponents() {
-        
+        // extends in children
     }
 
 }

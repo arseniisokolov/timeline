@@ -36,14 +36,14 @@ export class ListItemInfoPage extends Page {
     public initializeAfterRender() {
         super.initializeAfterRender();
         if (!this._itemId || !this._docType) {
-            App.RouterService.navigate('list');
+            App.RouterService.navigate('main/list');
             return;
         }
         App.TimelineEventsService.getItemById(this._docType, this._itemId)
             .pipe(takeUntil(this.subsKiller.Unsubscriber))
             .subscribe((item: TimelineEventModel) => {
                 if (!item) {
-                    App.RouterService.navigate('list');
+                    App.RouterService.navigate('main/list');
                     return;
                 }
                 this._model = item;
@@ -69,7 +69,7 @@ export class ListItemInfoPage extends Page {
 
     private checkTemplateEvents() {
         this.getElement('item-info__btn_back').addEventListener('click', () =>
-            App.RouterService.navigate('list')
+            App.RouterService.navigate('main/list')
         );
         const deleteItemBtnElem = this.getElement('item-info__btn_delete');
         const acceptItemBtnElem = this.getElement('item-info__btn_accept');

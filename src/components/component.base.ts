@@ -8,9 +8,9 @@ export abstract class Component {
     }
     protected state: ComponentStateType;
     protected bemBlockElem: Element;
+    protected subsKiller = new SubscriptionsKiller();
 
     protected abstract getTemplate: (state: TemplateStateType) => string;
-    protected subsKiller = new SubscriptionsKiller();
 
     constructor(state: ComponentStateType) {
         if (!state.bemBlock)
