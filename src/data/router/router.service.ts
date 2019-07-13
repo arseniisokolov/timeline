@@ -3,85 +3,89 @@ import { tap, first } from 'rxjs/operators';
 import { Page } from '../../pages/page.base';
 import { App } from '../../index/index';
 import { AppRoutingTree } from '../../pages/app-routing-tree';
-import { RoutingTreeType, RoutingTreeBranchType, PageConstructorType, NotFoundRoute } from './router.types';
+import { NotFoundRoute } from './router.types';
+import { CurrentRouteModel } from './current-route.model';
 
 /** TO DO: сейчас при каждом loadRoute дерево перерисовывается полностью. Добавить умную проверку рутов. */
 export class RouterService {
 
-    private _currentPage: Page;
-    private _currentPath: string;
-    private _currentRouteNode: string;
-    private _routes: string[];
-    private _currentRouterOutlet: string;
-    private _currentRoutingTree: RoutingTreeType | RoutingTreeBranchType;
-    private _notFoundPage: PageConstructorType;
+    /** Текущий узел дерева рутов */
+    private _currentRoute: CurrentRouteModel;
+    /** Текущая часть сроки запроса */
+    private _currentPathPart: string;
+    private _path: string[];
 
     constructor() {
+        this._currentRoute = new CurrentRouteModel();
         this.checkBrowserButtons();
     }
 
     /** Загружает текущий рут */
-    public loadRoute() {
-        this._currentPath = window.location.pathname.replace('/', '');
-        this._routes = this._currentPath.split('/');
-        this._currentRouteNode = this._routes[0];
-        this._currentRoutingTree = AppRoutingTree;
-        this._notFoundPage = this._currentRoutingTree[NotFoundRoute as unknown as string].Page; // обходим баг TS: https://github.com/Microsoft/TypeScript/issues/24587
-        this._currentRouterOutlet = App.Config.routerOutletElem;
-        this.handleRouteNode();
+    public load() {
+        this._path = window.location.pathname.replace('/', '').split('/');
+        this._currentPathPart = this._path[0];
+        this._currentRoute.initialize(AppRoutingTree, App.Config.routerOutletBlock, this._currentPathPart);
+        this.handleCurrentPathPart();
     }
 
     /** Перейти на рут */
     public navigate(name: string) {
         window.history.pushState({}, "", `${window.location.origin}/${name}`)
-        this.loadRoute();
+        this.load();
     }
 
     /** Выдает текущие параметры строки запроса */
-    public getRouteParams(): URLSearchParams {
+    public getParams(): URLSearchParams {
         return new URLSearchParams(window.location.search);
     }
 
-    private handleRouteNode() {
-        const routeNode = this._currentRoutingTree[this._currentRouteNode];
-        if (!routeNode) {
+    /** Обрабатывает текущую часть url согласно инструкции из дерева рутов */
+    private handleCurrentPathPart() {
+        if (!this._currentRoute.Node) {
             this.renderNotFoundPage();
             return;
         }
-        if (routeNode.redirectTo) {
-            this.navigate(routeNode.redirectTo);
+        if (this._currentRoute.Node.redirectTo) {
+            this.navigate(this._currentRoute.Node.redirectTo);
             return;
         }
-        this._currentPage = new routeNode.Page({ bemBlock: this._currentRouterOutlet });
-        this.renderPage(this._currentPage)
+        const currentPage = this._currentRoute.createPage();
+        this.renderPage(currentPage)
             .pipe(first())
             .subscribe(() => {
-                const currentIndex = this._routes.indexOf(this._currentRouteNode);
-                this._currentRouteNode = this._routes[currentIndex + 1] || '';
-                const isLastAndWithoutRedirect = !routeNode.children || !this._currentRouteNode && !routeNode.children[''];
-                if (isLastAndWithoutRedirect)
+                this.switchPathPart();
+                if (!this._currentRoute.Node.children)
                     return;
-                this._currentRouterOutlet = this._currentPage.getInnerRouterOutletBlock();
-                this._currentRoutingTree = routeNode.children;
-                this.handleRouteNode();
+                if (!this._currentPathPart && this._currentRoute.withRedirect())
+                    return;
+                this._currentRoute.initialize(this._currentRoute.Node.children, currentPage.getInnerRouterOutletBlock(), this._currentPathPart);
+                this.handleCurrentPathPart();
             });
-    }
-
-    private renderNotFoundPage() {
-        this._currentPage = new this._notFoundPage({ bemBlock: App.Config.routerOutletElem });
-        this.renderPage(this._currentPage).pipe(first()).subscribe();
     }
 
     private renderPage(page: Page): Observable<void> {
         return page.initialize().pipe(tap(() => page.initializeAfterRender()));
     }
 
+    /** Переход на страницу 404 */
+    private renderNotFoundPage() {
+        const notFoundPage = AppRoutingTree[NotFoundRoute as unknown as string].Page; // обходим баг TS: https://github.com/Microsoft/TypeScript/issues/24587
+        this.renderPage(new notFoundPage({ bemBlock: App.Config.routerOutletBlock }))
+            .pipe(first())
+            .subscribe();
+    }
+
+    private switchPathPart() {
+        const currentIndex = this._path.indexOf(this._currentPathPart);
+        this._currentPathPart = this._path[currentIndex + 1] || '';
+    }
+
     /** Отслеживает переходы вперед/назад в браузере */
     private checkBrowserButtons() {
         window.addEventListener("popstate", () => {
-            if (window.location.pathname === this._currentPath)
+            if (window.location.pathname === this._currentPathPart)
                 return;
-            this.loadRoute();
+            this.load();
         });
     }
 

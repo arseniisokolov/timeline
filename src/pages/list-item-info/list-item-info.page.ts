@@ -53,7 +53,7 @@ export class ListItemInfoPage extends Page {
     }
 
     public initialize(): Observable<void> {
-        const params = App.RouterService.getRouteParams();
+        const params = App.RouterService.getParams();
         this._itemId = params.get('id');
         this._docType = params.get('docType') as TimelineDocTypes;
         return super.initialize();

@@ -14,7 +14,7 @@ class Application {
             TimelineDocTypes.News,
         ],
         /** Имя BEM-блока router-outlet */
-        routerOutletElem: 'layout__inner',
+        routerOutletBlock: 'layout__inner',
     };
 
     // singleton-классы
@@ -27,7 +27,7 @@ class Application {
     }
 
     public start() {
-        this.RouterService.loadRoute()
+        this.RouterService.load()
     }
 
 }
