@@ -6,7 +6,7 @@ import { Page } from "../page.base";
 import { TimelineDocTypes } from "../../data/base/timeline-doc-types.enum";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
-import { TemplateStateType, ComponentStateType } from "../../components/component.base";
+import { ComponentStateType } from "../../components/component.base";
 
 //templates and styles
 import { getListItemInfoTransactionPageTemplate } from "./list-item-info-transaction.page.html";
@@ -23,7 +23,7 @@ export class ListItemInfoPage extends Page {
         super(state);
     }
 
-    protected getTemplate: (state: TemplateStateType) => string = getListItemInfoTransactionPageTemplate;
+    protected getTemplate: (state: any) => string = getListItemInfoTransactionPageTemplate;
 
     /** TO DO: вместо этого switch создать два компонента */
     // {

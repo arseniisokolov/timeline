@@ -1,6 +1,4 @@
-import { TemplateStateType } from "../../components/component.base";
-
-export function getListItemInfoTransactionPageTemplate(state: TemplateStateType): string {
+export function getListItemInfoTransactionPageTemplate(state: any): string {
     return `
         <div class="item-info">
             <div class="item-info__header">

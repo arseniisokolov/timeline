@@ -6,7 +6,7 @@ import { AppRoutingTree } from '../../pages/app-routing-tree';
 import { NotFoundRoute } from './router.types';
 import { CurrentRouteModel } from './current-route.model';
 
-/** TO DO: сейчас при каждом loadRoute дерево перерисовывается полностью. Добавить умную проверку рутов. */
+/** TO DO: сейчас при каждом load дерево перерисовывается полностью. Добавить умную проверку рутов. */
 export class RouterService {
 
     /** Текущий узел дерева рутов */
@@ -22,14 +22,14 @@ export class RouterService {
 
     /** Загружает текущий рут */
     public load() {
-        this._path = window.location.pathname.replace('/', '').split('/');
-        this._currentPathPart = this._path[0];
+        this.initializePathPart();
         this._currentRoute.initialize(AppRoutingTree, App.Config.routerOutletBlock, this._currentPathPart);
-        this.handleCurrentPathPart();
+        this.handlePathPartLoop();
     }
 
     /** Перейти на рут */
     public navigate(name: string) {
+        this._path = window.location.pathname.replace('/', '').split('/');
         window.history.pushState({}, "", `${window.location.origin}/${name}`)
         this.load();
     }
@@ -40,7 +40,7 @@ export class RouterService {
     }
 
     /** Обрабатывает текущую часть url согласно инструкции из дерева рутов */
-    private handleCurrentPathPart() {
+    private handlePathPartLoop() {
         if (!this._currentRoute.Node) {
             this.renderNotFoundPage();
             return;
@@ -56,10 +56,10 @@ export class RouterService {
                 this.switchPathPart();
                 if (!this._currentRoute.Node.children)
                     return;
-                if (!this._currentPathPart && this._currentRoute.withRedirect())
+                if (!this._currentPathPart && this._currentRoute.hasRedirect())
                     return;
                 this._currentRoute.initialize(this._currentRoute.Node.children, currentPage.getInnerRouterOutletBlock(), this._currentPathPart);
-                this.handleCurrentPathPart();
+                this.handlePathPartLoop();
             });
     }
 
@@ -73,6 +73,11 @@ export class RouterService {
         this.renderPage(new notFoundPage({ bemBlock: App.Config.routerOutletBlock }))
             .pipe(first())
             .subscribe();
+    }
+
+    private initializePathPart() {
+        this._path = window.location.pathname.replace('/', '').split('/');
+        this._currentPathPart = this._path[0];
     }
 
     private switchPathPart() {

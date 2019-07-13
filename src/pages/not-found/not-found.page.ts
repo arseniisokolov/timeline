@@ -1,6 +1,5 @@
 import { Page } from "../page.base";
-import { Observable, of } from "rxjs";
-import { ComponentStateType, TemplateStateType } from "../../components/component.base";
+import { ComponentStateType } from "../../components/component.base";
 
 //templates and styles
 import { getNotFoundPageTemplate } from "./not-found.page.template";
@@ -12,6 +11,6 @@ export class NotFoundPage extends Page {
         super(state);
     }
 
-    public getTemplate: (state: TemplateStateType) => string = getNotFoundPageTemplate;
+    public getTemplate: (state: any) => string = getNotFoundPageTemplate;
 
 }

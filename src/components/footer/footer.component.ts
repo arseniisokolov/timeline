@@ -1,8 +1,8 @@
-import { Component, TemplateStateType } from "../component.base";
+import { Component } from "../component.base";
 import { getFooterTemplate } from "./footer.component.template";
 
 export class FooterComponent extends Component {
 
-    protected getTemplate: (state: TemplateStateType) => string = getFooterTemplate;
+    protected getTemplate: (state: any) => string = getFooterTemplate;
 
 }

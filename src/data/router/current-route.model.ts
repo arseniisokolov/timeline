@@ -21,7 +21,7 @@ export class CurrentRouteModel {
         return new this.Node.Page({ bemBlock: this._routerOutletBlock });
     }
 
-    public withRedirect(): boolean {
+    public hasRedirect(): boolean {
         if (!this._node)
             return true;
         return !this._node.children[''];

@@ -8,12 +8,12 @@ import { TimelineListViewModel } from "../../data/view-models/timeline-list.view
 import { TransactionModel } from "../../data/models/transaction.model";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
-import { TemplateStateType, ComponentStateType } from "../../components/component.base";
+import { ComponentStateType, Component } from "../../components/component.base";
+import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
+import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
 
 //templates and styles
 import { getListPageTemplate } from "./list.page.template";
-import { getListItemTransactionHtml } from "./list-items/list-item-payment.page.html";
-import { getListItemNewsHtml } from "./list-items/list-item-news.html";
 import './styles/list.master.scss';
 
 export class ListPage extends Page {
@@ -25,7 +25,7 @@ export class ListPage extends Page {
         super(state);
     }
 
-    protected getTemplate: (state: TemplateStateType) => string = getListPageTemplate;
+    protected getTemplate: (state: any) => string = getListPageTemplate;
 
     public initializeAfterRender() {
         if (!this._viewModel.IsInitialized)
@@ -33,7 +33,6 @@ export class ListPage extends Page {
         super.initializeAfterRender();
         this.checkTemplateEvents();
         this.renderFilter();
-        this.renderItems(this._viewModel.VisibleItems);
         this.checkForNewItems();
     }
 
@@ -47,15 +46,9 @@ export class ListPage extends Page {
             );
     }
 
-    private getItemTemplate(item: TimelineEventModel) {
-        const node: Element = document.createElement('div');
-        if (item instanceof TransactionModel) {
-            node.innerHTML = getListItemTransactionHtml(item);
-        }
-        if (item instanceof NewsItemModel) {
-            node.innerHTML = getListItemNewsHtml(item);
-        }
-        return node;
+    public initializeComponents() {
+        super.initializeComponents();
+        this.renderItems(this._viewModel.VisibleItems);
     }
 
     private renderItems(items: TimelineEventModel[]) {
@@ -66,13 +59,26 @@ export class ListPage extends Page {
         if (loader)
             loader.remove();
         items.forEach(item => {
-            const itemElem = this.getItemTemplate(item);
-            listElem.insertBefore(itemElem, listElem.firstChild);
-            itemElem.addEventListener('click', (e: Event) => {
+            const itemBlock = `list__item_${item.Id}`;
+            const node: Element = document.createElement('div');
+            node.classList.add(itemBlock);
+            listElem.insertBefore(node, listElem.firstChild);
+            this.createComponent(item, itemBlock).renderTemplate();
+            node.addEventListener('click', (e: Event) => {
                 stopPropagation(e);
                 App.RouterService.navigate(`main/info?id=${item.Id}&docType=${item.DocType}`);
             });
         });
+    }
+
+    private createComponent(item: TimelineEventModel, bemBlock: string): Component {
+        if (item instanceof TransactionModel) {
+            return new ListItemTransactionComponent({ templateState: { Item: item }, bemBlock });
+        }
+        if (item instanceof NewsItemModel) {
+            return new ListItemNewsComponent({ templateState: { Item: item }, bemBlock });
+        }
+        throw 'Такой тип события невозможно обработать';
     }
 
     private renderFilter() {

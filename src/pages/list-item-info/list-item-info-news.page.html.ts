@@ -1,6 +1,4 @@
-import { TemplateStateType } from "../../components/component.base";
-
-export function getListItemInfoNewsPageTemplate(state: TemplateStateType): string {
+export function getListItemInfoNewsPageTemplate(state: any): string {
     return `
         <div class="item-info">
             <div class="item-info__header">

@@ -1,6 +1,4 @@
-import { TemplateStateType } from "../component.base";
-
-export function getFooterTemplate(state: TemplateStateType) {
+export function getFooterTemplate(state: any) {
     return `
         <div class="footer__about">
             <div class="footer__title">SPA</div>

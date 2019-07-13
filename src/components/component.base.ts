@@ -10,7 +10,7 @@ export abstract class Component {
     protected bemBlockElem: Element;
     protected subsKiller = new SubscriptionsKiller();
 
-    protected abstract getTemplate: (state: TemplateStateType) => string;
+    protected abstract getTemplate: (state: any) => string;
 
     constructor(state: ComponentStateType) {
         if (!state.bemBlock)
@@ -79,12 +79,6 @@ export abstract class Component {
 
 export type ComponentStateType = {
     bemBlock: string;
-    templateState?: TemplateStateType;
+    templateState?: any & {};
     data?: any & {};
 }
-
-
-export type TemplateStateType = {
-    Title?: string;
-    Caption?: string;
-};

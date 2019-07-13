@@ -1,6 +1,4 @@
-import { TemplateStateType } from "../../components/component.base";
-
-export function getListPageTemplate(state: TemplateStateType): string {
+export function getListPageTemplate(state: any): string {
     return `
         <div class="list">
             <div class="list__filter-bar filter-bar">
