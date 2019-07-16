@@ -13,7 +13,7 @@ class Application {
             TimelineDocTypes.Transaction,
             TimelineDocTypes.News,
         ],
-        /** Имя BEM-блока router-outlet */
+        /** Имя BEM-блока исходного router-outlet */
         routerOutletBlock: 'layout__inner',
     };
 
