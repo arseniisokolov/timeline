@@ -1,5 +1,5 @@
 import { TimelineDocTypes } from "./timeline-doc-types.enum";
-import {  getFormattedTime, getFormattedDate } from "./helpers";
+import { getFormattedTime, getFormattedDate } from "./helpers";
 
 /** Запись о событии в ленте новостей */
 export abstract class TimelineEventModel {
@@ -26,12 +26,11 @@ export abstract class TimelineEventModel {
     }
 
     public getFormattedDate(): string {
-        const dateAlias = this.Date.toDateString() === new Date().toDateString() ? 'сегодня' :  getFormattedDate(this.Date);
-        return `${ getFormattedTime(this.Date)}, ${dateAlias}`;
+        const dateAlias = this.Date.toDateString() === new Date().toDateString() ? 'сегодня' : getFormattedDate(this.Date);
+        return `${getFormattedTime(this.Date)}, ${dateAlias}`;
     }
 
 }
-
 
 /** Запись о событии в ленте новостей */
 export interface ITimelineEvent {

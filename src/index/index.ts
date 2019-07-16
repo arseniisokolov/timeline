@@ -1,5 +1,5 @@
 import { TimelineEventsService } from "../data/services/timeline-events.service";
-import { RouterService } from "../data/services/router.service";
+import { RouterService } from "../data/router/router.service";
 import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
 
 import "./styles/index.scss";
@@ -13,8 +13,8 @@ class Application {
             TimelineDocTypes.Transaction,
             TimelineDocTypes.News,
         ],
-        /** Имя BEM-блока router-outlet */
-        routerOutletElem: 'layout__router-outlet',
+        /** Имя BEM-блока исходного router-outlet */
+        routerOutletBlock: 'layout__inner',
     };
 
     // singleton-классы
@@ -27,7 +27,7 @@ class Application {
     }
 
     public start() {
-        this.RouterService.loadRoute()
+        this.RouterService.load()
     }
 
 }

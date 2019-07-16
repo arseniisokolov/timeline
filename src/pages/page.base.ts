@@ -1,38 +1,26 @@
-import { Observable, Subject } from "rxjs";
+import { Observable, of } from "rxjs";
+import { Component } from "../components/component.base";
 
-export abstract class Page {
-
-    /** Имя корневого BEM-блока шаблона этой страницы */
-    protected abstract pageBlockName: string;
-    /** Корневой BEM-блок шаблона этой страницы */
-    protected pageBlock: Element;
-    protected _unsubscriber: Subject<void> = new Subject<void>();
-
-    /** Выдает html-разметку страницы */
-    public abstract getTemplate(): string;
+export abstract class Page extends Component {
 
     /** Инициализация после отрисовки */
     public initializeAfterRender() {
-        this.pageBlock = this.getBlock(this.pageBlockName);
+        this.initializeComponents();
     }
 
-    /** Отписаться от всех асинхронных подписок */
-    public unsubscribeAll() {
-        this._unsubscriber.next();
-        this._unsubscriber.complete();
+    /** Инициализация и отрисовка */
+    public initialize(): Observable<void> {
+        this.renderTemplate();
+        return of(null);
+    };
+
+    public getInnerRouterOutletBlock(): string {
+        const elem = this.bemBlockElem.querySelector('[router-outlet]');
+        return elem ? elem.className : '';
     }
 
-    /** Инициализация до отрисовки */
-    public abstract initialize(): Observable<void>;
-
-    /** Ищет BEM-блок по всему html приложения */
-    protected getBlock(name: string): Element {
-        return window.document.getElementsByClassName(name)[0];
-    }
-
-    /** Ищет BEM-элемент в пределах текущей страницы */
-    protected getElement(name: string): Element {
-        return this.pageBlock.getElementsByClassName(name)[0];
+    protected initializeComponents() {
+        // extends in children
     }
 
 }

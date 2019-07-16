@@ -3,8 +3,8 @@ import { map, first } from "rxjs/operators";
 import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
-import { timelineModelsFabric } from "../base/timeline-model-fabric";
 import { Randomizer } from "./randomizer";
+import { TimelineEventFabric } from "../base/timeline-event.fabric";
 
 export class TimelineEventsService {
 
@@ -27,7 +27,7 @@ export class TimelineEventsService {
                     map(items => {
                         if (!items)
                             return;
-                        return timelineModelsFabric(docType, this.handleLatest(onlyLatest, items, docType));
+                        return TimelineEventFabric.create(docType, this.handleLatest(onlyLatest, items, docType));
                     })
                 )
             )

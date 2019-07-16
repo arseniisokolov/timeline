@@ -1,24 +1,16 @@
 import { Page } from "../page.base";
-import { Observable, of } from "rxjs";
+import { ComponentStateType } from "../../components/component.base";
 
 //templates and styles
-import { notFoundPageHtml } from "./not-found.page.html";
+import { getNotFoundPageTemplate } from "./not-found.page.template";
 import './styles/not-found.master.scss';
 
 export class NotFoundPage extends Page {
 
-  protected pageBlockName: string = 'not-found';
+    constructor(state: ComponentStateType) {
+        super(state);
+    }
 
-  constructor() {
-    super();
-  }
-
-  public initialize(): Observable<void> {
-    return of(null);
-  }
-
-  public getTemplate(): string {
-    return notFoundPageHtml;
-  }
+    public getTemplate: (state: any) => string = getNotFoundPageTemplate;
 
 }

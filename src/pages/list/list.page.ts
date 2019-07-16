@@ -1,5 +1,5 @@
 import { interval, Observable } from "rxjs";
-import { takeUntil, first, map } from "rxjs/operators";
+import { takeUntil, first, tap, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index/index";
 import { Page } from "../page.base";
@@ -8,26 +8,24 @@ import { TimelineListViewModel } from "../../data/view-models/timeline-list.view
 import { TransactionModel } from "../../data/models/transaction.model";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
+import { ComponentStateType, Component } from "../../components/component.base";
+import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
+import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
 
 //templates and styles
-import { getListPageHtml } from "./list.page.html";
-import { getListItemTransactionHtml } from "./list-items/list-item-payment.page.html";
-import { getListItemNewsHtml } from "./list-items/list-item-news.html";
+import { getListPageTemplate } from "./list.page.template";
 import './styles/list.master.scss';
 
 export class ListPage extends Page {
 
-    protected pageBlockName: string = 'list';
     private _viewModel: TimelineListViewModel;
     private _isFilterElemVisible: boolean;
 
-    constructor() {
-        super();
+    constructor(state: ComponentStateType) {
+        super(state);
     }
 
-    public getTemplate(): string {
-        return getListPageHtml();
-    }
+    protected getTemplate: (state: any) => string = getListPageTemplate;
 
     public initializeAfterRender() {
         if (!this._viewModel.IsInitialized)
@@ -35,27 +33,22 @@ export class ListPage extends Page {
         super.initializeAfterRender();
         this.checkTemplateEvents();
         this.renderFilter();
-        this.renderItems(this._viewModel.VisibleItems);
         this.checkForNewItems();
     }
 
     public initialize(): Observable<void> {
         this._viewModel = new TimelineListViewModel();
-        return App.TimelineEventsService.getItems(App.Config.listDocTypes).pipe(takeUntil(this._unsubscriber))
-            .pipe(map(items => {
-                this._viewModel.initialize({ items, sortingMode: 'byDate' });
-            }));
+        return App.TimelineEventsService.getItems(App.Config.listDocTypes)
+            .pipe(
+                takeUntil(this.subsKiller.Unsubscriber),
+                tap(items => this._viewModel.initialize({ items, sortingMode: 'byDate' })),
+                switchMapTo(super.initialize())
+            );
     }
 
-    private getItemTemplate(item: TimelineEventModel) {
-        const node: Element = document.createElement('div');
-        if (item instanceof TransactionModel) {
-            node.innerHTML = getListItemTransactionHtml(item);
-        }
-        if (item instanceof NewsItemModel) {
-            node.innerHTML = getListItemNewsHtml(item);
-        }
-        return node;
+    public initializeComponents() {
+        super.initializeComponents();
+        this.renderItems(this._viewModel.VisibleItems);
     }
 
     private renderItems(items: TimelineEventModel[]) {
@@ -66,13 +59,26 @@ export class ListPage extends Page {
         if (loader)
             loader.remove();
         items.forEach(item => {
-            const itemElem = this.getItemTemplate(item);
-            listElem.insertBefore(itemElem, listElem.firstChild);
-            itemElem.addEventListener('click', (e: Event) => {
+            const itemBlock = `list__item_${item.Id}`;
+            const node: Element = document.createElement('div');
+            node.classList.add(itemBlock);
+            listElem.insertBefore(node, listElem.firstChild);
+            this.createComponent(item, itemBlock).renderTemplate();
+            node.addEventListener('click', (e: Event) => {
                 stopPropagation(e);
-                App.RouterService.navigate(`info?id=${item.Id}&docType=${item.DocType}`);
+                App.RouterService.navigate(`main/info?id=${item.Id}&docType=${item.DocType}`);
             });
         });
+    }
+
+    private createComponent(item: TimelineEventModel, bemBlock: string): Component {
+        if (item instanceof TransactionModel) {
+            return new ListItemTransactionComponent({ templateState: { Item: item }, bemBlock });
+        }
+        if (item instanceof NewsItemModel) {
+            return new ListItemNewsComponent({ templateState: { Item: item }, bemBlock });
+        }
+        throw 'Такой тип события невозможно обработать';
     }
 
     private renderFilter() {
@@ -111,7 +117,7 @@ export class ListPage extends Page {
     }
 
     private checkForNewItems() {
-        interval(5000).pipe(takeUntil(this._unsubscriber))
+        interval(5000).pipe(takeUntil(this.subsKiller.Unsubscriber))
             .subscribe(() => {
                 App.TimelineEventsService.getItems(App.Config.listDocTypes, true).pipe(first())
                     .subscribe(items => {
