@@ -1,6 +1,6 @@
-import { AmountModel } from "../base/amount.model";
 import { TimelineEventModel, ITimelineEvent } from "../base/timeline-event.model";
 import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
+import { AmountModel } from "../../../core-library/core/models/amount.model";
 
 /** Финансовая транзакция */
 export class TransactionModel extends TimelineEventModel {

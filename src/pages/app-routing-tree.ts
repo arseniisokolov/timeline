@@ -1,9 +1,8 @@
 import { MainPage } from "./main/main.page";
-import { Page } from "./page.base";
 import { ListPage } from "./list/list.page";
 import { ListItemInfoPage } from "./list-item-info/list-item-info.page";
 import { NotFoundPage } from "./not-found/not-found.page";
-import { RoutingTreeType, NotFoundRoute } from "../data/router/router.types";
+import { RoutingTreeType, NotFoundRoute } from "../../core-library/core/vanilla-components/router/router.types";
 
 
 /** Дерево рутов приложения */

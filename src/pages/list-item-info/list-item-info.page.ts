@@ -2,13 +2,13 @@ import { interval, Observable, of } from "rxjs";
 import { first, takeUntil, map, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index/index";
-import { Page } from "../page.base";
 import { TimelineDocTypes } from "../../data/base/timeline-doc-types.enum";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
-import { ComponentStateType, Component } from "../../components/component.base";
 import { ListItemInfoTransactionComponent } from "../../components/list-item-info/transaction/list-item-info-transaction.component";
 import { ListItemInfoNewsComponent } from "../../components/list-item-info/news/list-item-info-news.component";
+import { Page } from "../../../core-library/core/vanilla-components/page.base";
+import { ComponentStateType, Component } from "../../../core-library/core/vanilla-components/component.base";
 
 // templates and styles
 import { getListItemInfoPageTemplate } from "./list-item-info.page.template";

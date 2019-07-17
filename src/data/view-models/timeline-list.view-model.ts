@@ -1,6 +1,6 @@
 import { TimelineEventModel } from "../base/timeline-event.model";
 import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
-import { groupBy } from "../base/helpers";
+import { Helpers } from "../../../core-library/core/helpers";
 
 export class TimelineListViewModel {
 
@@ -42,7 +42,7 @@ export class TimelineListViewModel {
     }
 
     private getAssortedByType(items: TimelineEventModel[]): TimelineEventModel[] {
-        return groupBy<TimelineEventModel, TimelineDocTypes>(items, i => i.DocType)
+        return Helpers.groupBy<TimelineEventModel, TimelineDocTypes>(items, i => i.DocType)
             .map(group => this.getAssortedByDate(group.Values)).reduce((acc, item) => acc.concat(item));
     }
 

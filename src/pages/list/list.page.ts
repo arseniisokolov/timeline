@@ -2,19 +2,19 @@ import { interval, Observable } from "rxjs";
 import { takeUntil, first, tap, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index/index";
-import { Page } from "../page.base";
-import { stopPropagation } from "../../data/base/helpers";
 import { TimelineListViewModel } from "../../data/view-models/timeline-list.view-model";
 import { TransactionModel } from "../../data/models/transaction.model";
 import { TimelineEventModel } from "../../data/base/timeline-event.model";
 import { NewsItemModel } from "../../data/models/news-item.model";
-import { ComponentStateType, Component } from "../../components/component.base";
 import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
 import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
+import { Page } from "../../../core-library/core/vanilla-components/page.base";
+import { ComponentStateType, Component } from "../../../core-library/core/vanilla-components/component.base";
 
 //templates and styles
 import { getListPageTemplate } from "./list.page.template";
 import './styles/list.master.scss';
+import { Helpers } from "../../../core-library/core/helpers";
 
 export class ListPage extends Page {
 
@@ -65,7 +65,7 @@ export class ListPage extends Page {
             listElem.insertBefore(node, listElem.firstChild);
             this.createComponent(item, itemBlock).renderTemplate();
             node.addEventListener('click', (e: Event) => {
-                stopPropagation(e);
+                Helpers.stopPropagation(e);
                 App.RouterService.navigate(`main/info?id=${item.Id}&docType=${item.DocType}`);
             });
         });

@@ -1,0 +1,3 @@
+[submodule "core-library"]
+	path = core-library
+	url = https://github.com/arseniyasokolov/core-library.git
