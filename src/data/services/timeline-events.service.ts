@@ -1,10 +1,10 @@
 import { Observable, forkJoin, interval } from "rxjs";
 import { map, first } from "rxjs/operators";
 import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
-import { LocalStorageAdapter } from "./local-storage.adapter";
 import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
 import { Randomizer } from "./randomizer";
 import { TimelineEventFabric } from "../base/timeline-event.fabric";
+import { LocalStorageAdapter } from "../../../core-library/core/services/local-storage.adapter";
 
 export class TimelineEventsService {
 

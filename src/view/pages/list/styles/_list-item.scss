@@ -1,0 +1,90 @@
+.list-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 70%;
+    height: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 2rem 3rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 10px 6px 11px -5px rgba(40,40,40,0.48);
+    cursor: pointer;
+    transition: box-shadow .3s;
+
+    &__amount {
+        font-family: $sub-font;
+        font-size: 1.5rem;
+        margin-right: 3rem;
+        color: $base-color;
+        width: 25%;
+    }
+
+    &__date {
+        font-family: $sub-font;
+        font-size: 1.2rem;
+        padding-left: 2rem;
+        color: $sub-color;
+        flex: 1 1 20%;
+    }
+
+    &__title {
+        font-family: $base-font;
+        font-size: 2rem;
+        color: $base-color;
+    }
+
+    &__main-info {
+        font-family: $base-font;
+        display: flex;
+        align-items: baseline;
+        flex: 1 1 80%;
+    }
+}
+
+// States 
+.list-item {
+    &:hover {
+        box-shadow: 10px 6px 7px 0px rgba(40, 40, 40, 0.6);
+    }
+
+    &__title_is-new {
+        font-weight: 600;
+    }
+
+    &__title_is-visited {
+        color: $sub-color;
+        font-weight: initial;
+    }
+
+    &__amount_is-positive {
+        color: #00ce43;
+    }
+
+    &__amount_is-negative {
+        color: $accent-color;
+    }
+}
+
+.list-item {
+    @media (max-width: 1170px) {
+        width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        &__main-info {
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        &__amount {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        &__date {
+            font-size: 1.5rem;
+        }
+    }
+}
