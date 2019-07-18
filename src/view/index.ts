@@ -1,7 +1,7 @@
 import { TimelineEventsService } from "../data/services/timeline-events.service";
 import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
 import { RouterService } from "../../core-library/core/vanilla-components/router/router.service";
-import { AppRoutingTree } from "../pages/app-routing-tree";
+import { AppRoutingTree } from "./pages/app-routing-tree";
 
 import "./styles/index.scss";
 

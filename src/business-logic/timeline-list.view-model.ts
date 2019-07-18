@@ -1,6 +1,6 @@
-import { TimelineEventModel } from "../base/timeline-event.model";
-import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
-import { Helpers } from "../../../core-library/core/helpers";
+import { TimelineEventModel } from "../data/base/timeline-event.model";
+import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
+import { Helpers } from "../../core-library/core/helpers";
 
 export class TimelineListViewModel {
 

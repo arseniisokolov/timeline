@@ -1,4 +1,4 @@
-import { TransactionModel } from "../../../data/models/transaction.model";
+import { TransactionModel } from "../../../../data/models/transaction.model";
 
 export function getListItemInfoTransactionTemplate(state: TransactionModel) {
     return `

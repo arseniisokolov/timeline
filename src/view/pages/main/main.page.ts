@@ -1,5 +1,5 @@
-import { ComponentStateType } from "../../../core-library/core/vanilla-components/component.base";
-import { Page } from "../../../core-library/core/vanilla-components/page.base";
+import { ComponentStateType } from "../../../../core-library/core/vanilla-components/component.base";
+import { Page } from "../../../../core-library/core/vanilla-components/page.base";
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
 

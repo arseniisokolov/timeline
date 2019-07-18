@@ -7,7 +7,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: {
-        'app': './src/index/index.ts'
+        'app': './src/view/index.ts'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -61,7 +61,7 @@ module.exports = {
             {}
         ),
         new HtmlWebpackPlugin({
-            template: 'src/index/index.html'
+            template: 'src/view/index.html'
         }),
         new MiniCssExtractPlugin({
             filename: "[name].css"

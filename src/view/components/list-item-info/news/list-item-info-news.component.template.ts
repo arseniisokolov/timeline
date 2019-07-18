@@ -1,4 +1,4 @@
-import { NewsItemModel } from "../../../data/models/news-item.model";
+import { NewsItemModel } from "../../../../data/models/news-item.model";
 
 export function getListItemInfoNewsTemplate(state: NewsItemModel) {
     const btnCssClass = state.IsVisited ? 'item-info__btn_is-disabled' : '';

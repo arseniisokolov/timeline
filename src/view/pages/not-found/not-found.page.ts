@@ -1,5 +1,5 @@
-import { Page } from "../../../core-library/core/vanilla-components/page.base";
-import { ComponentStateType } from "../../../core-library/core/vanilla-components/component.base";
+import { Page } from "../../../../core-library/core/vanilla-components/page.base";
+import { ComponentStateType } from "../../../../core-library/core/vanilla-components/component.base";
 
 //templates and styles
 import { getNotFoundPageTemplate } from "./not-found.page.template";

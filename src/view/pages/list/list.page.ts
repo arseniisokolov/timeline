@@ -1,20 +1,20 @@
 import { interval, Observable } from "rxjs";
 import { takeUntil, first, tap, switchMapTo } from "rxjs/operators";
 
-import { App } from "../../index/index";
-import { TimelineListViewModel } from "../../data/view-models/timeline-list.view-model";
-import { TransactionModel } from "../../data/models/transaction.model";
-import { TimelineEventModel } from "../../data/base/timeline-event.model";
-import { NewsItemModel } from "../../data/models/news-item.model";
+import { App } from "../../index";
+import { TimelineListViewModel } from "../../../business-logic/timeline-list.view-model";
+import { TransactionModel } from "../../../data/models/transaction.model";
+import { TimelineEventModel } from "../../../data/base/timeline-event.model";
+import { NewsItemModel } from "../../../data/models/news-item.model";
 import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
 import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
-import { Page } from "../../../core-library/core/vanilla-components/page.base";
-import { ComponentStateType, Component } from "../../../core-library/core/vanilla-components/component.base";
+import { Page } from "../../../../core-library/core/vanilla-components/page.base";
+import { ComponentStateType, Component } from "../../../../core-library/core/vanilla-components/component.base";
+import { Helpers } from "../../../../core-library/core/helpers";
 
 //templates and styles
 import { getListPageTemplate } from "./list.page.template";
 import './styles/list.master.scss';
-import { Helpers } from "../../../core-library/core/helpers";
 
 export class ListPage extends Page {
 
