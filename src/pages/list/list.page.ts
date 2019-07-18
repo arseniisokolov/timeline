@@ -59,9 +59,9 @@ export class ListPage extends Page {
         if (loader)
             loader.remove();
         items.forEach(item => {
-            const itemBlock = `list__item_${item.Id}`;
+            const itemBlock = `list-item_${item.Id}`;
             const node: Element = document.createElement('div');
-            node.classList.add(itemBlock);
+            node.classList.add('list-item', itemBlock);
             listElem.insertBefore(node, listElem.firstChild);
             this.createComponent(item, itemBlock).renderTemplate();
             node.addEventListener('click', (e: Event) => {
