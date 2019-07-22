@@ -3,9 +3,9 @@ import { takeUntil, first, tap, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index";
 import { TimelineListViewModel } from "../../../business-logic/timeline-list.view-model";
-import { TransactionModel } from "../../../data/models/transaction.model";
-import { TimelineEventModel } from "../../../data/base/timeline-event.model";
-import { NewsItemModel } from "../../../data/models/news-item.model";
+import { TransactionEntryModel } from "../../../data/models/transaction-entry.model";
+import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
+import { NewsEntryModel } from "../../../data/models/news-entry.model";
 import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
 import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
 import { Page } from "../../../../core-library/core/vanilla-components/page.base";
@@ -38,7 +38,7 @@ export class ListPage extends Page {
 
     public initialize(): Observable<void> {
         this._viewModel = new TimelineListViewModel();
-        return App.TimelineEventsService.getItems(App.Config.listDocTypes)
+        return App.TimelineEntriesService.getItems(App.Config.listDocTypes)
             .pipe(
                 takeUntil(this.subsKiller.Unsubscriber),
                 tap(items => this._viewModel.initialize({ items, sortingMode: 'byDate' })),
@@ -51,7 +51,7 @@ export class ListPage extends Page {
         this.renderItems(this._viewModel.VisibleItems);
     }
 
-    private renderItems(items: TimelineEventModel[]) {
+    private renderItems(items: TimelineEntryModel[]) {
         if (!items.length)
             return;
         const listElem = this.getElement('list__body');
@@ -71,11 +71,11 @@ export class ListPage extends Page {
         });
     }
 
-    private createComponent(item: TimelineEventModel, bemBlock: string): Component {
-        if (item instanceof TransactionModel) {
+    private createComponent(item: TimelineEntryModel, bemBlock: string): Component {
+        if (item instanceof TransactionEntryModel) {
             return new ListItemTransactionComponent({ templateState: { Item: item }, bemBlock });
         }
-        if (item instanceof NewsItemModel) {
+        if (item instanceof NewsEntryModel) {
             return new ListItemNewsComponent({ templateState: { Item: item }, bemBlock });
         }
         throw 'Такой тип события невозможно обработать';
@@ -119,7 +119,7 @@ export class ListPage extends Page {
     private checkForNewItems() {
         interval(5000).pipe(takeUntil(this.subsKiller.Unsubscriber))
             .subscribe(() => {
-                App.TimelineEventsService.getItems(App.Config.listDocTypes, true).pipe(first())
+                App.TimelineEntriesService.getItems(App.Config.listDocTypes, true).pipe(first())
                     .subscribe(items => {
                         if (!items.length)
                             return;

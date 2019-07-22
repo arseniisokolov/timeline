@@ -1,20 +1,20 @@
-import { TimelineEventModel, ITimelineEvent } from "../base/timeline-event.model";
-import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
+import { TimelineEntryModel, ITimelineShowable } from "../base/timeline-entry.model";
+import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
 
 /** Новость о событии */
-export class NewsItemModel extends TimelineEventModel {
+export class NewsEntryModel extends TimelineEntryModel {
 
-    public static handleResponse(data: INewsItem[]): NewsItemModel[] {
+    public static handleResponse(data: INewsItem[]): NewsEntryModel[] {
         if (!Array.isArray(data))
             return [];
         return data.map(i => {
-            const model = new NewsItemModel();
+            const model = new NewsEntryModel();
             model.fromData(i);
             return model;
         });
     }
 
-    public DocType: TimelineDocTypes = TimelineDocTypes.News;
+    public DocType: TimelineEntryTypes = TimelineEntryTypes.News;
     /** Новость была прочитана */
     public IsVisited: boolean;
 
@@ -35,7 +35,7 @@ export class NewsItemModel extends TimelineEventModel {
 }
 
 /** Новость о событии */
-export interface INewsItem extends ITimelineEvent {
+export interface INewsItem extends ITimelineShowable {
 
     extract: string;
     isVisited: boolean;

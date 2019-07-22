@@ -1,15 +1,15 @@
-import { TimelineEventModel } from "../data/base/timeline-event.model";
-import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
+import { TimelineEntryModel } from "../data/base/timeline-entry.model";
+import { TimelineEntryTypes } from "../data/base/timeline-entry-types.enum";
 import { Helpers } from "../../core-library/core/helpers";
 
 export class TimelineListViewModel {
 
-    public VisibleItems: TimelineEventModel[];
+    public VisibleItems: TimelineEntryModel[];
     public IsInitialized: boolean;
     /** Способ сортировки */
     public SortingMode: 'byDate' | 'byType';
 
-    private _items: TimelineEventModel[] = [];
+    private _items: TimelineEntryModel[] = [];
 
     public initialize(data: ITimelineListInitializeData) {
         this._items = data.items;
@@ -21,7 +21,7 @@ export class TimelineListViewModel {
     /** Добавляет новые записи к текущему списку и
      *  выдает их отсортированными
      */
-    public appendItems(items: TimelineEventModel[]): TimelineEventModel[] {
+    public appendItems(items: TimelineEntryModel[]): TimelineEntryModel[] {
         this._items = [...this._items, ...items];
         this.VisibleItems = this._items;
         this.sortBy(this.SortingMode);
@@ -41,12 +41,12 @@ export class TimelineListViewModel {
         }
     }
 
-    private getAssortedByType(items: TimelineEventModel[]): TimelineEventModel[] {
-        return Helpers.groupBy<TimelineEventModel, TimelineDocTypes>(items, i => i.DocType)
+    private getAssortedByType(items: TimelineEntryModel[]): TimelineEntryModel[] {
+        return Helpers.groupBy<TimelineEntryModel, TimelineEntryTypes>(items, i => i.DocType)
             .map(group => this.getAssortedByDate(group.Values)).reduce((acc, item) => acc.concat(item));
     }
 
-    private getAssortedByDate(items: TimelineEventModel[]): TimelineEventModel[] {
+    private getAssortedByDate(items: TimelineEntryModel[]): TimelineEntryModel[] {
         return items.sort((a, b) => a.Date > b.Date ? 1 : -1);
     }
 
@@ -54,7 +54,7 @@ export class TimelineListViewModel {
 
 export interface ITimelineListInitializeData {
 
-    items?: TimelineEventModel[],
+    items?: TimelineEntryModel[],
     /** Способ сортировки */
     sortingMode?: 'byDate' | 'byType';
 

@@ -1,18 +1,18 @@
-import { TimelineDocTypes } from "./timeline-doc-types.enum";
+import { TimelineEntryTypes } from "./timeline-entry-types.enum";
 import { Helpers } from "../../../core-library/core/helpers";
 
 /** Запись о событии в ленте новостей */
-export abstract class TimelineEventModel {
+export abstract class TimelineEntryModel {
 
-    public abstract DocType: TimelineDocTypes;
+    public abstract DocType: TimelineEntryTypes;
     public Id: string;
     public Date: Date;
     public Title: string;
     public Description: string;
 
-    private _snapshot: ITimelineEvent;
+    private _snapshot: ITimelineShowable;
 
-    public fromData(data: ITimelineEvent) {
+    public fromData(data: ITimelineShowable) {
         this._snapshot = data;
         this.Id = data.id;
         this.Description = data.description;
@@ -20,8 +20,8 @@ export abstract class TimelineEventModel {
             this.Date = new Date(data.docDate);
     }
 
-    public toData(): ITimelineEvent {
-        let res: ITimelineEvent = this._snapshot;
+    public toData(): ITimelineShowable {
+        let res: ITimelineShowable = this._snapshot;
         return res;
     }
 
@@ -33,7 +33,7 @@ export abstract class TimelineEventModel {
 }
 
 /** Запись о событии в ленте новостей */
-export interface ITimelineEvent {
+export interface ITimelineShowable {
 
     id: string;
     docDate: number;

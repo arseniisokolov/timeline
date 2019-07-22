@@ -1,26 +1,26 @@
 import { Observable, forkJoin, interval } from "rxjs";
 import { map, first } from "rxjs/operators";
-import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
-import { ITimelineEvent, TimelineEventModel } from "../base/timeline-event.model";
+import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
+import { ITimelineShowable, TimelineEntryModel } from "../base/timeline-entry.model";
 import { Randomizer } from "./randomizer";
-import { TimelineEventFabric } from "../base/timeline-event.fabric";
+import { TimelineEventFabric } from "../base/timeline-entry.fabric";
 import { LocalStorageAdapter } from "../../../core-library/core/services/local-storage.adapter";
 
-export class TimelineEventsService {
+export class TimelineEntriesService {
 
-    private _localStorage: LocalStorageAdapter<ITimelineEvent>;
+    private _localStorage: LocalStorageAdapter<ITimelineShowable>;
     /** Хеш id последних записей для каждого из типов документов */
     private _lastIdsCache: { [key: string]: string } = {};
 
     constructor() {
-        this._localStorage = new LocalStorageAdapter<ITimelineEvent>();
+        this._localStorage = new LocalStorageAdapter<ITimelineShowable>();
         this.generateMockRequests();
     }
 
     /** Выдает записи указанных типов
      * @param onlyLatest будут выданы только последние записи (обновления отслеживаются автоматически)
      */
-    public getItems(docTypes: TimelineDocTypes[], onlyLatest?: boolean): Observable<TimelineEventModel[]> {
+    public getItems(docTypes: TimelineEntryTypes[], onlyLatest?: boolean): Observable<TimelineEntryModel[]> {
         return forkJoin(
             docTypes.map(docType =>
                 this._localStorage.get(docType.toLowerCase()).pipe(
@@ -37,24 +37,24 @@ export class TimelineEventsService {
             }));
     }
 
-    public getItemById(docType: TimelineDocTypes, id: string): Observable<TimelineEventModel> {
+    public getItemById(docType: TimelineEntryTypes, id: string): Observable<TimelineEntryModel> {
         return this.getItems([docType]).pipe(
             first(),
             map(items => items.find(i => i.Id === id)),
         );
     }
 
-    public updateItem(docType: TimelineDocTypes, item: ITimelineEvent): Observable<void> {
+    public updateItem(docType: TimelineEntryTypes, item: ITimelineShowable): Observable<void> {
         return this._localStorage.update(docType.toLowerCase(), item);
     }
 
-    public deleteItem(docType: TimelineDocTypes, id: string): Observable<void> {
+    public deleteItem(docType: TimelineEntryTypes, id: string): Observable<void> {
         return this._localStorage.delete(docType.toLowerCase(), id);
     }
 
 
     /** Выдает только последние записи */
-    private handleLatest(isOnlyLatest: boolean, items: ITimelineEvent[], docType: TimelineDocTypes): ITimelineEvent[] {
+    private handleLatest(isOnlyLatest: boolean, items: ITimelineShowable[], docType: TimelineEntryTypes): ITimelineShowable[] {
         let filteredItems = items;
         if (isOnlyLatest) {
             if (this._lastIdsCache[docType]) {
@@ -71,11 +71,11 @@ export class TimelineEventsService {
     private generateMockRequests() {
         const randomizer = new Randomizer();
         interval(10000).subscribe(() => {
-            randomizer.getRandomData(TimelineDocTypes.Transaction).subscribe(data => {
-                this._localStorage.post(TimelineDocTypes.Transaction.toLowerCase(), [data]).subscribe();
+            randomizer.getRandomData(TimelineEntryTypes.Transaction).subscribe(data => {
+                this._localStorage.post(TimelineEntryTypes.Transaction.toLowerCase(), [data]).subscribe();
             });
-            randomizer.getRandomData(TimelineDocTypes.News).subscribe(data => {
-                this._localStorage.post(TimelineDocTypes.News.toLowerCase(), [data]).subscribe();
+            randomizer.getRandomData(TimelineEntryTypes.News).subscribe(data => {
+                this._localStorage.post(TimelineEntryTypes.News.toLowerCase(), [data]).subscribe();
             });
         })
     }

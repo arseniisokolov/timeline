@@ -1,21 +1,21 @@
-import { TimelineEventModel, ITimelineEvent } from "../base/timeline-event.model";
-import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
+import { TimelineEntryModel, ITimelineShowable } from "../base/timeline-entry.model";
+import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
 import { AmountModel } from "../../../core-library/core/models/amount.model";
 
 /** Финансовая транзакция */
-export class TransactionModel extends TimelineEventModel {
+export class TransactionEntryModel extends TimelineEntryModel {
 
-    public static handleResponse(data: ITransaction[]): TransactionModel[] {
+    public static handleResponse(data: ITransaction[]): TransactionEntryModel[] {
         if (!Array.isArray(data))
             return [];
         return data.map(i => {
-            const model = new TransactionModel();
+            const model = new TransactionEntryModel();
             model.fromData(i);
             return model;
         });
     }
 
-    public DocType: TimelineDocTypes = TimelineDocTypes.Transaction;
+    public DocType: TimelineEntryTypes = TimelineEntryTypes.Transaction;
     public Amount: AmountModel;
 
     public fromData(data: ITransaction) {
@@ -34,7 +34,7 @@ export class TransactionModel extends TimelineEventModel {
 }
 
 /** Финансовая транзакция */
-export interface ITransaction extends ITimelineEvent {
+export interface ITransaction extends ITimelineShowable {
 
     amount: number;
     currency: string;

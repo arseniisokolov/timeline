@@ -2,13 +2,14 @@ import { interval, Observable, of } from "rxjs";
 import { first, takeUntil, map, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index";
-import { TimelineDocTypes } from "../../../data/base/timeline-doc-types.enum";
-import { TimelineEventModel } from "../../../data/base/timeline-event.model";
-import { NewsItemModel } from "../../../data/models/news-item.model";
+import { TimelineEntryTypes } from "../../../data/base/timeline-entry-types.enum";
+import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
+import { NewsEntryModel } from "../../../data/models/news-entry.model";
 import { ListItemInfoTransactionComponent } from "../../components/list-item-info/transaction/list-item-info-transaction.component";
 import { ListItemInfoNewsComponent } from "../../components/list-item-info/news/list-item-info-news.component";
 import { Page } from "../../../../core-library/core/vanilla-components/page.base";
-import { ComponentStateType, Component } from "../../../../core-library/core/vanilla-components/component.base";
+import { ComponentStateType } from "../../../../core-library/core/vanilla-components/component.base";
+import { IListItemInfoAccessable } from "../../components/list-item-info/list-item-info-accessable";
 
 // templates and styles
 import { getListItemInfoPageTemplate } from "./list-item-info.page.template";
@@ -16,9 +17,10 @@ import './styles/list-item-info.master.scss'
 
 export class ListItemInfoPage extends Page {
 
-    private _model: TimelineEventModel;
+    private _model: TimelineEntryModel;
     private _itemId: string;
-    private _docType: TimelineDocTypes;
+    private _docType: TimelineEntryTypes;
+    private _infoComponent: IListItemInfoAccessable;
 
     constructor(state: ComponentStateType) {
         super(state);
@@ -29,7 +31,7 @@ export class ListItemInfoPage extends Page {
     public initialize(): Observable<void> {
         const params = App.RouterService.getParams();
         this._itemId = params.get('id');
-        this._docType = params.get('docType') as TimelineDocTypes;
+        this._docType = params.get('docType') as TimelineEntryTypes;
         if (!this._itemId || !this._docType) {
             App.RouterService.navigate('main/list');
             return of(null);
@@ -39,7 +41,8 @@ export class ListItemInfoPage extends Page {
 
     public initializeComponents() {
         super.initializeComponents();
-        this.createInfoComponent().renderTemplate();
+        this._infoComponent = this.createInfoComponent();
+        this._infoComponent.renderTemplate();
         this.checkTemplateEvents();
     }
 
@@ -47,22 +50,24 @@ export class ListItemInfoPage extends Page {
      * Фабрика
      * @pure
      */
-    private createInfoComponent(): Component {
-        if (this._model.DocType === TimelineDocTypes.Transaction)
+    private createInfoComponent(): IListItemInfoAccessable {
+        if (this._model.DocType === TimelineEntryTypes.Transaction)
             return new ListItemInfoTransactionComponent({ bemBlock: 'item-info', templateState: this._model });
-        if (this._model.DocType === TimelineDocTypes.News)
+        if (this._model.DocType === TimelineEntryTypes.News)
             return new ListItemInfoNewsComponent({ bemBlock: 'item-info', templateState: this._model });
     }
 
     private checkTemplateEvents() {
-        this.getElement('item-info__btn_back').addEventListener('click', () =>
-            App.RouterService.navigate('main/list')
-        );
+        this._infoComponent.EventEmitters.onBack
+            .pipe(takeUntil(this.subsKiller.Unsubscriber))
+            .subscribe(() => {
+                App.RouterService.navigate('main/list');
+            });
         const deleteItemBtnElem = this.getElement('item-info__btn_delete');
         const acceptItemBtnElem = this.getElement('item-info__btn_accept');
         if (deleteItemBtnElem)
             deleteItemBtnElem.addEventListener('click', () => {
-                App.TimelineEventsService.deleteItem(this._docType, this._itemId)
+                App.TimelineEntriesService.deleteItem(this._docType, this._itemId)
                     .pipe(takeUntil(this.subsKiller.Unsubscriber))
                     .subscribe(() => {
                         interval(500).pipe(first())
@@ -71,9 +76,9 @@ export class ListItemInfoPage extends Page {
             })
         if (acceptItemBtnElem)
             acceptItemBtnElem.addEventListener('click', () => {
-                if (this._model instanceof NewsItemModel)
+                if (this._model instanceof NewsEntryModel)
                     this._model.IsVisited = true;
-                App.TimelineEventsService.updateItem(this._docType, this._model.toData())
+                App.TimelineEntriesService.updateItem(this._docType, this._model.toData())
                     .pipe(takeUntil(this.subsKiller.Unsubscriber))
                     .subscribe(() => {
                         this.initializeAfterRender();
@@ -82,10 +87,10 @@ export class ListItemInfoPage extends Page {
     }
 
     private loadInfo(): Observable<void> {
-        return App.TimelineEventsService.getItemById(this._docType, this._itemId)
+        return App.TimelineEntriesService.getItemById(this._docType, this._itemId)
             .pipe(
                 takeUntil(this.subsKiller.Unsubscriber),
-                map((item: TimelineEventModel) => {
+                map((item: TimelineEntryModel) => {
                     if (!item) {
                         App.RouterService.navigate('main/list');
                         return;
