@@ -36,7 +36,7 @@ export class ListItemInfoPage extends Page {
             App.RouterService.navigate('main/list');
             return of(null);
         }
-        return this.loadInfo().pipe(switchMapTo(super.initialize()));
+        return this.loadItem().pipe(switchMapTo(super.initialize()));
     }
 
     public initializeComponents() {
@@ -58,35 +58,26 @@ export class ListItemInfoPage extends Page {
     }
 
     private checkTemplateEvents() {
-        this._infoComponent.EventEmitters.onBack
+        this._infoComponent.Events.onBack
             .pipe(takeUntil(this.subsKiller.Unsubscriber))
             .subscribe(() => {
                 App.RouterService.navigate('main/list');
             });
-        const deleteItemBtnElem = this.getElement('item-info__btn_delete');
-        const acceptItemBtnElem = this.getElement('item-info__btn_accept');
-        if (deleteItemBtnElem)
-            deleteItemBtnElem.addEventListener('click', () => {
-                App.TimelineEntriesService.deleteItem(this._docType, this._itemId)
-                    .pipe(takeUntil(this.subsKiller.Unsubscriber))
-                    .subscribe(() => {
-                        interval(500).pipe(first())
-                            .subscribe(() => App.RouterService.navigate('main/list'))
-                    });
-            })
-        if (acceptItemBtnElem)
-            acceptItemBtnElem.addEventListener('click', () => {
-                if (this._model instanceof NewsEntryModel)
-                    this._model.IsVisited = true;
-                App.TimelineEntriesService.updateItem(this._docType, this._model.toData())
-                    .pipe(takeUntil(this.subsKiller.Unsubscriber))
-                    .subscribe(() => {
-                        this.initializeAfterRender();
-                    });
-            })
+        if (this._infoComponent.Events.onDelete)
+            this._infoComponent.Events.onDelete
+                .pipe(takeUntil(this.subsKiller.Unsubscriber))
+                .subscribe(() => {
+                    this.deleteItem();
+                });
+        if (this._infoComponent.Events.onAccept)
+            this._infoComponent.Events.onAccept
+                .pipe(takeUntil(this.subsKiller.Unsubscriber))
+                .subscribe(() => {
+                    this.acceptItem();
+                });
     }
 
-    private loadInfo(): Observable<void> {
+    private loadItem(): Observable<void> {
         return App.TimelineEntriesService.getItemById(this._docType, this._itemId)
             .pipe(
                 takeUntil(this.subsKiller.Unsubscriber),
@@ -99,5 +90,23 @@ export class ListItemInfoPage extends Page {
                 })
             );
     }
+
+    private deleteItem() {
+        App.TimelineEntriesService.deleteItem(this._docType, this._itemId)
+            .pipe(takeUntil(this.subsKiller.Unsubscriber))
+            .subscribe(() => {
+                interval(500).pipe(first())
+                    .subscribe(() => App.RouterService.navigate('main/list'))
+            })
+    }
+
+    private acceptItem() {
+        App.TimelineEntriesService.updateItem(this._docType, this._model.toData())
+            .pipe(takeUntil(this.subsKiller.Unsubscriber))
+            .subscribe(() => {
+                this.initializeAfterRender();
+            })
+    }
+
 
 }

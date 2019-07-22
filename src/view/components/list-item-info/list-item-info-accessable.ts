@@ -3,6 +3,10 @@ import { Component } from "../../../../core-library/core/vanilla-components/comp
 
 export interface IListItemInfoAccessable extends Component {
 
-    EventEmitters: { onBack: Subject<void> };
+    Events: {
+        onBack: Subject<void>;
+        onDelete?: Subject<void>;
+        onAccept?: Subject<void>;
+    };
 
 }
