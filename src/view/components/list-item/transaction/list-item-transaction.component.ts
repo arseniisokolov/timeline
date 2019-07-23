@@ -5,5 +5,7 @@ export class ListItemTransactionComponent extends Component {
 
     protected getTemplate: (state: any) => string = getListItemTransactionTemplate;
 
+    
+
 }
 

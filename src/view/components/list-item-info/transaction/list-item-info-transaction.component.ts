@@ -1,9 +1,10 @@
 import { Subject, fromEvent } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 import { Component } from "../../../../../core-library/core/vanilla-components/component.base";
 import { getListItemInfoTransactionTemplate } from "./list-item-info-transaction.component.template";
 import { IListItemInfoAccessable } from "../list-item-info-accessable";
 import { Helpers } from "../../../../../core-library/core/helpers";
-import { takeUntil } from "rxjs/operators";
 
 export class ListItemInfoTransactionComponent extends Component implements IListItemInfoAccessable {
 

@@ -2,12 +2,17 @@ import { TimelineEntryModel } from "../data/base/timeline-entry.model";
 import { TimelineEntryTypes } from "../data/base/timeline-entry-types.enum";
 import { Helpers } from "../../core-library/core/helpers";
 
+export enum ListSortingModes {
+    byDate = 0,
+    byType = 1,
+}
+
 export class TimelineListViewModel {
 
     public VisibleItems: TimelineEntryModel[];
     public IsInitialized: boolean;
     /** Способ сортировки */
-    public SortingMode: 'byDate' | 'byType';
+    public SortingMode: ListSortingModes;
 
     private _items: TimelineEntryModel[] = [];
 
@@ -29,13 +34,13 @@ export class TimelineListViewModel {
     }
 
     /** Сортировать записи по ключу */
-    public sortBy(mode: 'byDate' | 'byType') {
+    public sortBy(mode: ListSortingModes) {
         this.SortingMode = mode;
         switch (mode) {
-            case 'byDate':
+            case ListSortingModes.byDate:
                 this.VisibleItems = this.getAssortedByDate(this.VisibleItems);
                 break;
-            case 'byType':
+            case ListSortingModes.byType:
                 this.VisibleItems = this.getAssortedByType(this.VisibleItems);
                 break;
         }
@@ -56,6 +61,6 @@ export interface ITimelineListInitializeData {
 
     items?: TimelineEntryModel[],
     /** Способ сортировки */
-    sortingMode?: 'byDate' | 'byType';
+    sortingMode?: ListSortingModes;
 
 }
