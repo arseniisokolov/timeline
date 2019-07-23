@@ -1,6 +1,6 @@
-import { TransactionModel } from "../../../../data/models/transaction.model";
+import { TransactionEntryModel } from "../../../data/models/transaction-entry.model";
 
-export function getListItemInfoTransactionTemplate(state: TransactionModel) {
+export function getListItemInfoTransactionTemplate(state: TransactionEntryModel) {
     return `
         <div class="item-info__header">
             <div class="item-info__btn item-info__btn_back"><i class="fas fa-long-arrow-alt-left"></i></div>

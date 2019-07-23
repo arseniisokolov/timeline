@@ -1,5 +1,5 @@
-import { TimelineEventsService } from "../data/services/timeline-events.service";
-import { TimelineDocTypes } from "../data/base/timeline-doc-types.enum";
+import { TimelineEntriesService } from "../data/services/timeline-entries.service";
+import { TimelineEntryTypes } from "../data/base/timeline-entry-types.enum";
 import { RouterService } from "../../core-library/core/vanilla-components/router/router.service";
 import { AppRoutingTree } from "./pages/app-routing-tree";
 
@@ -11,17 +11,17 @@ class Application {
     public Config = {
         /** Типы документов, которые будут загружены в ленту новостей */
         listDocTypes: [
-            TimelineDocTypes.Transaction,
-            TimelineDocTypes.News,
+            TimelineEntryTypes.Transaction,
+            TimelineEntryTypes.News,
         ]
     };
 
     // singleton-классы
-    public TimelineEventsService: TimelineEventsService;
+    public TimelineEntriesService: TimelineEntriesService;
     public RouterService: RouterService;
 
     constructor() {
-        this.TimelineEventsService = new TimelineEventsService();
+        this.TimelineEntriesService = new TimelineEntriesService();
         this.RouterService = new RouterService({ AppRoutingTree, RootOutlet: 'layout__inner' });
     }
 

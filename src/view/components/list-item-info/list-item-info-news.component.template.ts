@@ -1,6 +1,6 @@
-import { NewsItemModel } from "../../../../data/models/news-item.model";
+import { NewsEntryModel } from "../../../data/models/news-entry.model";
 
-export function getListItemInfoNewsTemplate(state: NewsItemModel) {
+export function getListItemInfoNewsTemplate(state: NewsEntryModel) {
     const btnCssClass = state.IsVisited ? 'item-info__btn_is-disabled' : '';
     return `
         <div class="item-info__header">

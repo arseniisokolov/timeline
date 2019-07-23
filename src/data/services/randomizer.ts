@@ -1,18 +1,18 @@
-import { TimelineDocTypes } from "../base/timeline-doc-types.enum";
+import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
 import { Observable, of } from "rxjs";
-import { ITransaction } from "../models/transaction.model";
-import { INewsItem } from "../models/news-item.model";
-import { ITimelineEvent } from "../base/timeline-event.model";
+import { ITransaction } from "../models/transaction-entry.model";
+import { INewsItem } from "../models/news-entry.model";
+import { ITimelineShowable } from "../base/timeline-entry.model";
 import { Helpers } from "../../../core-library/core/helpers";
 
 /** Генератор случайных записей */
 export class Randomizer {
 
-    public getRandomData(docType: TimelineDocTypes): Observable<ITimelineEvent> {
-        let item: ITimelineEvent;
+    public getRandomData(docType: TimelineEntryTypes): Observable<ITimelineShowable> {
+        let item: ITimelineShowable;
         switch (docType) {
-            case TimelineDocTypes.Transaction: item = this.getRandomTransaction(); break;
-            case TimelineDocTypes.News: item = this.getRandomNews(); break;
+            case TimelineEntryTypes.Transaction: item = this.getRandomTransaction(); break;
+            case TimelineEntryTypes.News: item = this.getRandomNews(); break;
         };
         return of(item);
     }
