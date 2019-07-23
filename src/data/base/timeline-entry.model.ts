@@ -30,6 +30,10 @@ export abstract class TimelineEntryModel {
         return `${Helpers.getFormattedTime(this.Date)}, ${dateAlias}`;
     }
 
+    public markAsVisited(): void {
+        // virtual
+    }
+
 }
 
 /** Запись о событии в ленте новостей */

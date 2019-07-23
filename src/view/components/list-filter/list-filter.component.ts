@@ -7,10 +7,6 @@ import { ListSortingModes } from "../../../business-logic/timeline-list.view-mod
 
 export class ListFilterComponent extends Component {
 
-    public Events: {
-        onFiltering: Subject<ListSortingModes>,
-    };
-
     protected onInit() {
         this.setEvents({
             onFiltering: new Subject<ListSortingModes>()

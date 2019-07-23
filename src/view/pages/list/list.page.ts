@@ -3,15 +3,11 @@ import { takeUntil, first, tap, switchMapTo } from "rxjs/operators";
 
 import { App } from "../../index";
 import { TimelineListViewModel, ListSortingModes } from "../../../business-logic/timeline-list.view-model";
-import { TransactionEntryModel } from "../../../data/models/transaction-entry.model";
 import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
-import { NewsEntryModel } from "../../../data/models/news-entry.model";
-import { ListItemTransactionComponent } from "../../components/list-item/transaction/list-item-transaction.component";
-import { ListItemNewsComponent } from "../../components/list-item/news/list-item-news.component";
 import { Page } from "../../../../core-library/core/vanilla-components/page.base";
 import { ComponentStateType, Component } from "../../../../core-library/core/vanilla-components/component.base";
-import { Helpers } from "../../../../core-library/core/helpers";
 import { ListFilterComponent } from "../../components/list-filter/list-filter.component";
+import { ListItemEntryComponent } from "../../components/list-item/list-item-entry.component";
 
 //templates and styles
 import { getListPageTemplate } from "./list.page.template";
@@ -62,34 +58,19 @@ export class ListPage extends Page {
         if (!item)
             return;
         const listElem = this.getElement('list__body');
-        const itemBlock = `list-item_${item.Id}`;
-        const node: Element = document.createElement('div');
-        node.classList.add('list-item', itemBlock);
-        listElem.insertBefore(node, listElem.firstChild);
-        this.createComponent(item, itemBlock).renderTemplate();
-        node.addEventListener('click', (e: Event) => {
-            Helpers.stopPropagation(e);
-            App.RouterService.navigate(`main/info?id=${item.Id}&docType=${item.DocType}`);
+        const itemBemModifier = `list-item_${item.Id}`;
+        const listItemElem: Element = document.createElement('div');
+        listItemElem.classList.add('list-item', itemBemModifier);
+        listElem.insertBefore(listItemElem, listElem.firstChild);
+        const component = new ListItemEntryComponent({
+            templateState: { Item: item }, bemBlock: itemBemModifier
         });
-    }
-
-    private setLoadingVisibility() {
-        const loader = this.getElement('list__loader');
-        if (loader)
-            loader.remove();
-    }
-
-    /** Фабрика
-     * @pure
-     */
-    private createComponent(item: TimelineEntryModel, bemBlock: string): Component {
-        if (item instanceof TransactionEntryModel) {
-            return new ListItemTransactionComponent({ templateState: { Item: item }, bemBlock });
-        }
-        if (item instanceof NewsEntryModel) {
-            return new ListItemNewsComponent({ templateState: { Item: item }, bemBlock });
-        }
-        return null;
+        component.renderTemplate();
+        component.Events.onSelect
+            .pipe(takeUntil(this.subsKiller.Unsubscriber))
+            .subscribe(() => {
+                App.RouterService.navigate(`main/info?id=${item.Id}&docType=${item.DocType}`);
+            });
     }
 
     private checkTemplateEvents() {
@@ -120,8 +101,18 @@ export class ListPage extends Page {
                             this._viewModel.VisibleItems.forEach(item => this.renderListItem(item));
                         }
                         this.setFilterVisibility();
+                        this.setLoadingVisibility();
                     });
             });
+    }
+
+    private setLoadingVisibility() {
+        if (!this._viewModel.IsInitialized || !this._viewModel.VisibleItems.length) {
+            return;
+        }
+        const loader = this.getElement('list__loader');
+        if (loader)
+            loader.remove();
     }
 
     private setFilterVisibility() {

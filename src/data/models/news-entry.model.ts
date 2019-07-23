@@ -15,21 +15,29 @@ export class NewsEntryModel extends TimelineEntryModel {
     }
 
     public DocType: TimelineEntryTypes = TimelineEntryTypes.News;
+
     /** Новость была прочитана */
-    public IsVisited: boolean;
+    public get IsVisited(): boolean {
+        return this._isVisited;
+    }
+    public _isVisited: boolean;
 
     public fromData(data: INewsItem) {
         if (!data)
             return;
         super.fromData(data);
         this.Title = data.extract;
-        this.IsVisited = data.isVisited;
+        this._isVisited = data.isVisited;
     }
 
     public toData(): INewsItem {
         const res: INewsItem = super.toData() as INewsItem;
         res.isVisited = this.IsVisited;
         return res;
+    }
+
+    public markAsVisited() {
+        this._isVisited = true;
     }
 
 }

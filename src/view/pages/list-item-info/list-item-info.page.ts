@@ -4,12 +4,9 @@ import { first, takeUntil, map, switchMapTo } from "rxjs/operators";
 import { App } from "../../index";
 import { TimelineEntryTypes } from "../../../data/base/timeline-entry-types.enum";
 import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
-import { NewsEntryModel } from "../../../data/models/news-entry.model";
-import { ListItemInfoTransactionComponent } from "../../components/list-item-info/transaction/list-item-info-transaction.component";
-import { ListItemInfoNewsComponent } from "../../components/list-item-info/news/list-item-info-news.component";
 import { Page } from "../../../../core-library/core/vanilla-components/page.base";
 import { ComponentStateType } from "../../../../core-library/core/vanilla-components/component.base";
-import { IListItemInfoAccessable } from "../../components/list-item-info/list-item-info-accessable";
+import { ListItemInfoEntryComponent } from "../../components/list-item-info/list-item-info-entry.component";
 
 // templates and styles
 import { getListItemInfoPageTemplate } from "./list-item-info.page.template";
@@ -20,7 +17,7 @@ export class ListItemInfoPage extends Page {
     private _model: TimelineEntryModel;
     private _itemId: string;
     private _docType: TimelineEntryTypes;
-    private _infoComponent: IListItemInfoAccessable;
+    private _infoComponent: ListItemInfoEntryComponent;
 
     constructor(state: ComponentStateType) {
         super(state);
@@ -41,20 +38,9 @@ export class ListItemInfoPage extends Page {
 
     public initializeComponents() {
         super.initializeComponents();
-        this._infoComponent = this.createInfoComponent();
+        this._infoComponent = new ListItemInfoEntryComponent({ bemBlock: 'item-info', templateState: this._model });
         this._infoComponent.renderTemplate();
         this.checkTemplateEvents();
-    }
-
-    /** 
-     * Фабрика
-     * @pure
-     */
-    private createInfoComponent(): IListItemInfoAccessable {
-        if (this._model.DocType === TimelineEntryTypes.Transaction)
-            return new ListItemInfoTransactionComponent({ bemBlock: 'item-info', templateState: this._model });
-        if (this._model.DocType === TimelineEntryTypes.News)
-            return new ListItemInfoNewsComponent({ bemBlock: 'item-info', templateState: this._model });
     }
 
     private checkTemplateEvents() {
