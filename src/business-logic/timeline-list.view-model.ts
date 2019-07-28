@@ -1,6 +1,6 @@
 import { TimelineEntryModel } from "../data/base/timeline-entry.model";
 import { TimelineEntryTypes } from "../data/base/timeline-entry-types.enum";
-import { Helpers } from "../../core-library/core/helpers";
+import { Helpers } from "../../core-library/core/classes/helpers";
 
 export enum ListSortingModes {
     byDate = 0,

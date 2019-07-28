@@ -4,7 +4,7 @@ import { takeUntil } from "rxjs/operators";
 import { Component } from "../../../../core-library/core/vanilla-components/component.base";
 import { getListItemInfoTransactionTemplate } from "./list-item-info-transaction.component.template";
 import { getListItemInfoNewsTemplate } from "./list-item-info-news.component.template";
-import { Helpers } from "../../../../core-library/core/helpers";
+import { Helpers } from "../../../../core-library/core/classes/helpers";
 import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
 import { TimelineEntryTypes } from "../../../data/base/timeline-entry-types.enum";
 import { NewsEntryModel } from "../../../data/models/news-entry.model";

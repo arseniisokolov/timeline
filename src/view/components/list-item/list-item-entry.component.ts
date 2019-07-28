@@ -6,7 +6,7 @@ import { getListItemTransactionTemplate } from "./list-item-transaction.componen
 import { getListItemNewsTemplate } from "./list-item-news.component.template";
 import { TimelineEntryModel } from "../../../data/base/timeline-entry.model";
 import { TimelineEntryTypes } from "../../../data/base/timeline-entry-types.enum";
-import { Helpers } from "../../../../core-library/core/helpers";
+import { Helpers } from "../../../../core-library/core/classes/helpers";
 
 export class ListItemEntryComponent extends Component {
 

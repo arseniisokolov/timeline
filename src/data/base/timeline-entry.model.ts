@@ -1,5 +1,5 @@
 import { TimelineEntryTypes } from "./timeline-entry-types.enum";
-import { Helpers } from "../../../core-library/core/helpers";
+import { Helpers } from "../../../core-library/core/classes/helpers";
 
 /** Запись о событии в ленте новостей */
 export abstract class TimelineEntryModel {
