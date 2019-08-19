@@ -6,6 +6,7 @@
 Vanilla TypeScript + RxJS + SASS + BEM + Webpack
 
 ### Как запустить:
+- клонировать сабмодуль <a href="https://github.com/arseniyasokolov/core-library">core-library</a>
 - npm i
 - npm run dev
 - для сборки npm run build
