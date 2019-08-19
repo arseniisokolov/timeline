@@ -3,7 +3,7 @@ import { Observable, of } from "rxjs";
 import { ITransaction } from "../models/transaction-entry.model";
 import { INewsItem } from "../models/news-entry.model";
 import { ITimelineShowable } from "../base/timeline-entry.model";
-import { Helpers } from "../../../core-library/core/helpers";
+import { Helpers } from "../../../core-library/core/classes/helpers";
 
 /** Генератор случайных записей */
 export class Randomizer {

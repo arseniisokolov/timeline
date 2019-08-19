@@ -1,6 +1,6 @@
 import { TimelineEntryModel, ITimelineShowable } from "../base/timeline-entry.model";
 import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
-import { AmountModel } from "../../../core-library/core/models/amount.model";
+import { AmountViewModel } from "../../../core-library/core/view-models/amount.view-model";
 
 /** Финансовая транзакция */
 export class TransactionEntryModel extends TimelineEntryModel {
@@ -16,13 +16,13 @@ export class TransactionEntryModel extends TimelineEntryModel {
     }
 
     public DocType: TimelineEntryTypes = TimelineEntryTypes.Transaction;
-    public Amount: AmountModel;
+    public Amount: AmountViewModel;
 
     public fromData(data: ITransaction) {
         if (!data)
             return;
         super.fromData(data);
-        this.Amount = new AmountModel(data.amount, data.currency, data.isDebet);
+        this.Amount = new AmountViewModel(data.amount, data.currency, data.isDebet);
         this.Title = data.senderName;
     }
 

@@ -21,8 +21,7 @@ export class MainPage extends Page {
             templateState: { Title: 'Лента оповещений' },
         }).renderTemplate();
         new FooterComponent({
-            bemBlock: 'layout__footer',
-            templateState: {}
+            bemBlock: 'layout__footer'
         }).renderTemplate();
     }
 
