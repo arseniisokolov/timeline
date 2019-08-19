@@ -1,8 +1,9 @@
 # timeline
-Лента оповещений
+Лента оповещений. Цель - написать на базе этого проекта собственную библиотеку для SPA на чистом TS.
+Смотри мой проект - https://github.com/users/arseniyasokolov/projects/1
 
 ### Технологии и методологии:
-TypeScript + RxJS + SASS + BEM + Webpack
+Vanilla TypeScript + RxJS + SASS + BEM + Webpack
 
 ### Как запустить:
 - npm i
