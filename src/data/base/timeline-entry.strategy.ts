@@ -3,7 +3,7 @@ import { ITimelineShowable, TimelineEntryModel } from "./timeline-entry.model";
 import { NewsEntryModel, INewsItem } from "../models/news-entry.model";
 import { TransactionEntryModel, ITransaction } from "../models/transaction-entry.model";
 
-export class TimelineEventFabric {
+export class TimelineEventStrategy {
 
     public static create(docType: TimelineEntryTypes, response: ITimelineShowable[]): TimelineEntryModel[] {
         switch (docType) {

@@ -7,6 +7,7 @@ export enum ListSortingModes {
     byType = 1,
 }
 
+/** Инкапсулирует логику вывода и сортировки списка */
 export class TimelineListViewModel {
 
     public VisibleItems: TimelineEntryModel[];
