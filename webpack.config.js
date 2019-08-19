@@ -10,7 +10,7 @@ module.exports = {
         'app': './src/view/index.ts'
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'docs'),
         publicPath: '/',
         filename: '[name].[hash].js'
     },
@@ -73,6 +73,6 @@ module.exports = {
                 minimize: false
             }
         }),
-        new ExtractTextPlugin("index.css")
+        new ExtractTextPlugin("demo.css")
     ],
 }
