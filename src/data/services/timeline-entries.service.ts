@@ -3,9 +3,10 @@ import { map, first } from "rxjs/operators";
 import { TimelineEntryTypes } from "../base/timeline-entry-types.enum";
 import { ITimelineShowable, TimelineEntryModel } from "../base/timeline-entry.model";
 import { Randomizer } from "./randomizer";
-import { TimelineEventFabric } from "../base/timeline-entry.fabric";
+import { TimelineEventStrategy } from "../base/timeline-entry.strategy";
 import { LocalStorageAdapter } from "../../../core-library/core/services/local-storage.adapter";
 
+/** Работа с данными по записям в ленте */
 export class TimelineEntriesService {
 
     private _localStorage: LocalStorageAdapter<ITimelineShowable>;
@@ -27,7 +28,7 @@ export class TimelineEntriesService {
                     map(items => {
                         if (!items)
                             return;
-                        return TimelineEventFabric.create(docType, this.handleLatest(onlyLatest, items, docType));
+                        return TimelineEventStrategy.create(docType, this.handleLatest(onlyLatest, items, docType));
                     })
                 )
             )
